@@ -9,7 +9,7 @@
 - Muhammad Dimas Fadilla
 
 ## Link meet
-- Kamis 10:30 - 11:30 http://meet.google.com/spg-heca-vcx
+- SELASA 9:30 - 10:30 http://meet.google.com/ddv-fzui-cgj
 
 ## Deadline
 - 14 Juni 2024
