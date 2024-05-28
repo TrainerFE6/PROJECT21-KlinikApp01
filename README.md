@@ -8,6 +8,7 @@
 - Alfin Naufal Azhali
 - Muhammad Dimas Fadilla
 
+semangat
 ## Link meet
 - SELASA 9:30 - 10:30 http://meet.google.com/ddv-fzui-cgj
 
