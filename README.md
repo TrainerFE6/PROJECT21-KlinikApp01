@@ -1,4 +1,4 @@
-# PROJECT21-KlinikApp-Frontend
+# PROJECT21-KlinikApp01
 
 ## Anggota Grub
 - Alfina Fitria
