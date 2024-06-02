@@ -133,7 +133,7 @@ Instruksi untuk setup config server dan automate script akan disediakan oleh tim
 - Profile
 - Login
 - Logout
-*Karena tidak semua fitur dimasukkan, akan ada penyesuaian pada dashboard untuk menampilkan fitur yang sesuai dengan hak akses pengguna.
+- *Karena tidak semua fitur dimasukkan, akan ada penyesuaian untuk menampilkan fitur yang sesuai dengan diskusi grub, dan hak akses pengguna.
 
 ## Hak Akses
 1. **Super Admin:**
