@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize";
 import db from "../config/database.js";
 import Users from "./UsersModel.js";
 import Dokter from "./DokterModels.js";
+import Spesialis from "./SpesialisModels.js";
 
 
 const {DataTypes} = Sequelize;
@@ -51,6 +52,14 @@ const Pasien = db.define('pasien', {
     validate:{
       notEmpty: true,
     }
+  },
+  dokterSPesialis : {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate:{
+      notEmpty: true,
+    }
+
   }
 
 },{

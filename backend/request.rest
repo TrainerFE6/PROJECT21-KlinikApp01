@@ -1,5 +1,5 @@
 // REGISTER
-POST http://localhost:5000/users
+POST http://localhost:5000/dokter
 Content-Type: application/json
 
 {
@@ -19,13 +19,13 @@ POST http://localhost:5000/LoginDokter
 Content-Type: application/json
 
 {
-  "email": "dimas@gmail.com",
+  "email": "fadillah@gmail.com",
   "password": "123"
 }
 
 ###
 // MENAMPILKAN DATA user login
-GET http://localhost:5000/me
+GET http://localhost:5000/MeDokter
 
 ###
 // MENAMPILKAN SEMUA DATA USER 
@@ -58,12 +58,14 @@ POST http://localhost:5000/pasien
 Content-Type: application/json
 
 {
-  "name": "Rifansyah",
-  "alamat":"Pasir Koja Kota Bandung",
+  "name": "dora emon",
+  "alamat":"moh toha bandunng",
   "ttl":"12-10-1998",
   "nohandphone":"089779018328",
-  "keluhan":"pantat bisul"
+  "keluhan":"pantat bisul",
+  "dokterSpesialis": "umum"
 }
+
 
 ###
 // MENAMPILKAN DATA PASIEN 

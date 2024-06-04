@@ -1,12 +1,15 @@
 import Pasien from "../models/PasienModel.js";
 import Users from "../models/UsersModel.js";
+import Dokter from "../models/DokterModels.js";
 import { Op } from "sequelize";
 
 // REGISTRASI PASIEN 
 
 export const RegisterPasien = async(req, res)=>{
   if(!req.session.userId) return res.status(404).json({msg: "Anda belum Login"});
-  const {name, alamat, ttl, nohandphone, keluhan} = req.body;
+
+
+  const {name, alamat, ttl, nohandphone, keluhan, dokterSpesialis} = req.body;
   try {
       await Pasien.create({
         name: name,
@@ -14,6 +17,7 @@ export const RegisterPasien = async(req, res)=>{
         ttl: ttl,
         nohandphone: nohandphone,
         keluhan: keluhan,
+        dokterSPesialis: dokterSpesialis,
         userId: req.userId
       });
       res.status(201).json({msg: "Product created Successfuly"});
@@ -29,9 +33,22 @@ export const RegisterPasien = async(req, res)=>{
 export const getPasienBydokter = async(req, res)=>{
   try {
     if(!req.session.dokterId) return res.status(404).json({msg: "Mohon Login terlebih dahulu"});
+
+    const dokter = await Dokter.findOne({
+      where:{
+        uuid:req.session.dokterId
+      }
+    });
+
+
+    const spesialis = dokter.spesialis;
+
     let response;
     response = await Pasien.findAll({
       attributes:['uuid', 'name', 'alamat', 'ttl', 'nohandphone', 'keluhan'],
+      where:{
+        dokterSPesialis: spesialis
+      },
       include:[{
         model: Users, 
         attributes:['name', 'email', 'role']
@@ -82,6 +99,26 @@ export const getPasienById = async(req, res)=>{
     res.json(response)
   } catch (error) {
     console.log(error.message);
+    
+  }
+}
+
+
+// mengapdate data pasien
+
+export const updatePasien = async(req, res)=> {
+  try {
+    const pasien = await Pasien.findOne({
+      where:{
+        id: req.params.id
+      }
+    });
+
+    if(!pasien) res.status(404).json({msg: "Data Pasien Tidak ditemukan"});
+
+    await pa
+
+  } catch (error) {
     
   }
 }

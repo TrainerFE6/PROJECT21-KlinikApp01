@@ -71,6 +71,7 @@ export const LoginDokter = async(req, res) =>{
   if(!match) return res.status(400).json({msg: "Password tidak sesuai/ditemukan"});
 
   req.session.dokterId = dokter.uuid;
+  req.session.Id = dokter.id;
   const uuid = dokter.uuid;
   const name = dokter.name;
   const email = dokter.email;
@@ -100,3 +101,4 @@ export const MeDokter = async(req, res)=>{
   if(!dokter) return res.status(400).json({msg: "User tidak ditemukan"});
   res.status(200).json(dokter)
 }
+
