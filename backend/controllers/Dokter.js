@@ -1,8 +1,9 @@
 import Dokter from "../models/DokterModels.js";
 import Spesialis from "../models/SpesialisModels.js";
+import JadwalDokter from "../models/JadwalDokter.js";
 
 import  argon2  from "argon2";
-import path from 'path';
+import path, { sep } from 'path';
 import fs from 'fs';
 import { where } from "sequelize";
 
@@ -102,3 +103,169 @@ export const MeDokter = async(req, res)=>{
   res.status(200).json(dokter)
 }
 
+// MENGAPDATE PROFILE DOKTER
+
+export const updateDokter = async(req, res)=>{
+
+  try {
+    const dokter = await Dokter.findOne({
+      where:{
+        id: req.params.id
+      }
+    });
+
+    if(!dokter) res.status(404).json({msg: "Data tidak ditemukan"})
+
+      let fileName;
+      if(!req.files || !req.files.foto){
+        fileName = dokter.foto;
+      }else{
+        const file = req.files.foto;
+        const fileSize= file.data.length;
+        const ext = path.extname(file.name);
+        fileName = file.md5 + ext;
+        const allowedType = ['.png', '.jpg', '.jpeg'];
+
+        if(!allowedType.includes(ext.toLocaleLowerCase())) return res.status(422).json({msg: "Gambar tidak valid"});
+        if(fileSize > 5000000) return res.status(422).json({msg: "Gambar harus kurang dari 5 MB"});
+
+        const oldFilePath = `./public/images/dokter/${dokter.foto}`;
+        const newFilePath = `./public/images/dokter/${fileName}`;
+
+        // hapus file gambar lama 
+
+        if(fs.existsSync(oldFilePath)){
+          fs.unlink(oldFilePath, (err) =>{
+            if(err) return res.status(500).json({msg: err.message});
+
+          });
+        }
+
+        // simpan file gambar baru 
+        file.mv(newFilePath, (err)=>{
+          if(err) return res.status(500).json({msg : err.message});
+
+        })
+
+      }
+
+      const name = req.body.name;
+      const {email, spesialis, confPassword, password} = req.body;
+      const url = `${req.protocol}://${req.get("host")}/images/dokter/${fileName}`;
+
+      if(password !== confPassword){
+        res.status(400).json({msg: "Password dan confpassword tidak sesuai"});
+      }
+
+
+      const seps = await Spesialis.findOne({
+        where:{
+          name: spesialis
+        }
+      });
+
+      if(!seps){
+        res.status(402).json({msg: "spesialis tidak terdaftar"});
+      }
+
+      const spesialisId = seps.id;
+
+      await Dokter.update({
+        nama: name,
+        email: email,
+        foto: fileName,
+        url: url,
+        spesialis: spesialis,
+        confPassword: confPassword,
+        password: password,
+        spesialisId: spesialisId
+      },{
+        where:{
+          id:req.params.id
+        }
+      });
+
+      res.status(200).json({msg: "Data berhasil diperbarui"});
+  } catch (error) {
+
+    console.log(error.message);
+    res.status(500).json({msg: "Kesalahan server"});
+    
+  }
+}
+
+
+// MENGHAPUS DATA DOKTER 
+
+export const deleteDokter = async(req, res)=>{
+  const dokter = await Dokter.findOne({
+    where:{
+      id: req.params.id
+    }
+  });
+
+  if(!dokter) return res.status(404).json({msg: "Data dokter tidak ditemukan"});
+
+  try {
+    const filePath = `./public/images/dokter/${dokter.foto}`;
+    fs.unlinkSync(filePath);
+
+    await dokter.destroy({
+      where:{
+        id: req.params.id
+      }
+    });
+
+    res.status(200).json({msg: "Data sukses dihapus"});
+    
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+// MENAMPILKAN DATA DOKTER UNTUK SUPER ADMIN
+
+export const getDokter = async(req, res)=>{
+  try {
+    const response = await Dokter.findAll({
+      attributes:['name', 'email', 'foto', 'url', 'spesialis']
+    })
+    res.status(200).json(response)
+  } catch (error) {
+    console.log(error.message);
+  }
+}
+
+
+// BUAT JADWAL DOKTER 
+
+export const createJadwal = async(req, res)=> {
+  if(!req.session.dokterId) res.status(404).json({msg: "session dokter tidak ditemukan"});
+
+  try {
+    const IdDokter = req.session.Id;
+
+  const dokter = await Dokter.findOne({
+    where:{
+      id: IdDokter
+    }
+
+  });
+  const {waktu_pelayanan, jadwal_pelayanan} = req.body;
+
+
+  await JadwalDokter.create({
+    nama_dokter: dokter.name,
+    spesialis : dokter.spesialis,
+    waktu_pelayanan: waktu_pelayanan,
+    jadwal_pelayanan: jadwal_pelayanan
+  });
+
+  res.status(200).json({msg: "Jadwal telah dibuat"});
+
+  } catch (error) {
+    console.log(error.message);
+    
+  }
+}

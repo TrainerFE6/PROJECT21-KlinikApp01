@@ -75,3 +75,15 @@ GET http://localhost:5000/pasienPerawat
 ###
 // MENAMPILKAN DATA PASIEN ID
 GET http://localhost:5000/pasienDokter
+
+
+###
+//BUAT JADWAL DOKTER
+
+POST http://localhost:5000/jadwalDokter
+Content-Type: application/json
+
+{
+  "waktu_pelayanan":"07.00 - 13.00",
+  "jadwal_pelayanan":"senin-jumat"
+}
