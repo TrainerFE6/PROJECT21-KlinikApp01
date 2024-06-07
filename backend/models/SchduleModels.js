@@ -8,6 +8,12 @@ import db from "../config/database.js";
 const {DataTypes} = Sequelize;
 
 const Skedule = db.define('skedule', {
+  noantrian:{
+    type: DataTypes.INTEGER,
+    allowNull: false,
+    autoIncrement: true,
+    primaryKey: true,
+  },
   title:{
     type: DataTypes.STRING,
     allowNull: false,
@@ -21,7 +27,7 @@ const Skedule = db.define('skedule', {
     allowNull: false,
     validate:{
       notEmpty: true,
-      isEmail: true
+      
     }
   },
   sceduletime:{

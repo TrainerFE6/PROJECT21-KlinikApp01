@@ -31,8 +31,12 @@ export const RegisterPasien = async(req, res)=>{
 
 // MENAMPILKAN DATA PASIEN 
 export const getPasienBydokter = async(req, res)=>{
+  
   try {
-    if(!req.session.dokterId) return res.status(404).json({msg: "Mohon Login terlebih dahulu"});
+    if(!req.session.dokterId){
+    console.log('session dokter tidak ditemukan');
+    return res.status(404).json({msg: "Mohon Login terlebih dahulu"})
+    }
 
     const dokter = await Dokter.findOne({
       where:{
@@ -40,12 +44,17 @@ export const getPasienBydokter = async(req, res)=>{
       }
     });
 
+    if(!dokter){
+      console.log('data dokter tidak ditemukan');
+      res.status(404).json({msg: "data dokter invalid"});
+    }
+
 
     const spesialis = dokter.spesialis;
 
     let response;
     response = await Pasien.findAll({
-      attributes:['uuid', 'name', 'alamat', 'ttl', 'nohandphone', 'keluhan'],
+      attributes:['uuid', 'name', 'alamat', 'ttl', 'nohandphone', 'keluhan',],
       where:{
         dokterSPesialis: spesialis
       },

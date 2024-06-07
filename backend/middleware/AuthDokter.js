@@ -8,7 +8,7 @@ export const verifyDokter = async(req, res, next)=>{
   }
   const dokter = Dokter.findOne({
     where:{
-      uuid: req.params.dokterId
+      uuid: req.session.dokterId
     }
   });
   if(!dokter) return res.status(404).json({msg: "Pengguna tidak ditemukan"});

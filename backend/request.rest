@@ -25,7 +25,7 @@ Content-Type: application/json
 
 ###
 // MENAMPILKAN DATA user login
-GET http://localhost:5000/MeDokter
+GET http://localhost:5000/dokterLogin
 
 ###
 // MENAMPILKAN SEMUA DATA USER 
@@ -87,3 +87,8 @@ Content-Type: application/json
   "waktu_pelayanan":"07.00 - 13.00",
   "jadwal_pelayanan":"senin-jumat"
 }
+
+
+###
+// BUAT SKEDULE PASIEN 
+POST http://localhost:5000/skedulePasien/3
