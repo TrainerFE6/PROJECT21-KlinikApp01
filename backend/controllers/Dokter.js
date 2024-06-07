@@ -8,6 +8,7 @@ import fs from 'fs';
 import { where } from "sequelize";
 
 
+
 // REGISTER DOKTER 
 
 export const createDokter = (req, res)=>{
@@ -268,4 +269,18 @@ export const createJadwal = async(req, res)=> {
     console.log(error.message);
     
   }
+}
+
+
+export const getSpesialis = async(req, res)=>{
+
+  try {
+    const spesialis = await Spesialis.findAll();
+    res.status(200).json(spesialis);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({msg: "data tidak ditemukan"})
+    
+  }
+
 }

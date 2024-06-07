@@ -1,8 +1,18 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import logout from "../service/authservice"; // Impor fungsi logout
 
 const Navbar = () => {
-  const pages = ["Home", "Tentang Kami", "Pelayanan", "Dokter", "contact", "Daftar"];
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+      navigate('/'); // Arahkan ke halaman login setelah logout
+    } catch (error) {
+      console.error("Gagal logout:", error);
+    }
+  };
 
   return (
     <div className="container-fluid sticky-top bg-white shadow-sm">
@@ -23,13 +33,24 @@ const Navbar = () => {
           </button>
           <div className="collapse navbar-collapse show" id="navbarCollapse">
             <div className="navbar-nav ms-auto py-0">
-
-              {pages.map((item, index) => ( // Add a key prop
-                <Link key={index} to={item.toLocaleLowerCase() === "home" ? "/home" : item.toLocaleLowerCase()} className="nav-item nav-link">
-                  {item.toLocaleLowerCase()}
-                </Link>
-              ))}
-
+              <Link to="/home" className="nav-item nav-link">
+                home
+              </Link>
+              <Link to="/tentang kami" className="nav-item nav-link">
+                tentang kami
+              </Link>
+              <Link to="/pelayanan" className="nav-item nav-link">
+                pelayanan
+              </Link>
+              <Link to="/dokter" className="nav-item nav-link">
+                dokter
+              </Link>
+              <Link to="/contact" className="nav-item nav-link">
+                contact
+              </Link>
+              <button onClick={handleLogout} className="nav-item nav-link btn btn-link">
+                Logout
+              </button>
             </div>
           </div>
         </nav>

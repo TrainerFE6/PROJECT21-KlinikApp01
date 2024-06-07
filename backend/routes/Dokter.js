@@ -1,5 +1,5 @@
 import express from 'express';
-import { createDokter, LoginDokter, MeDokter, updateDokter, deleteDokter, getDokter, createJadwal} from '../controllers/Dokter.js';
+import { createDokter, LoginDokter, MeDokter, updateDokter, deleteDokter, getDokter, createJadwal, getSpesialis} from '../controllers/Dokter.js';
 import { SkedulePasien } from '../controllers/Skedule.js';
 
 import { verifyDokter } from '../middleware/AuthDokter.js';
@@ -13,7 +13,8 @@ route.put('/dokterupdate/:id', verifyDokter, updateDokter);
 route.delete('/dokterdelete/:id', deleteDokter);
 route.get('/dokter', getDokter);
 route.post('/jadwalDokter', createJadwal);
-route.post('/skedulePasien/:id', verifyDokter,SkedulePasien)
+route.post('/skedulePasien/:id', verifyDokter,SkedulePasien);
+route.get('/spesialis', getSpesialis);
 
 
 

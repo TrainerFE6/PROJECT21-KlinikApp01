@@ -43,3 +43,35 @@ export const SkedulePasien = async(req, res) => {
     res.status(500).json({ msg: "Server error" });
   }
 }
+
+
+export const getSkedule = async(req, res)=>{
+  const pasien = await Pasien.findOne({
+    where:{
+      id: req.params.id
+    }
+  });
+
+  if(!pasien){
+    console.log("Data Pasien tidak ditemukan ");
+    return res.status(404).json({msg: "Data Pasien Invalid"});
+  }
+
+  const namaPasien = pasien.name;
+  if(!namaPasien){
+    return res.status(402).json({msg: "Pasien Belum Memmiliki jadwal"})
+  }
+
+  try {
+    const skedulePasien = await Skedule.findOne({
+      where:{
+        namePasien: namaPasien
+      }
+    });
+
+    res.status(200).json(skedulePasien);
+  } catch (error) {
+    console.log(error)
+    res.status(500).json({msg: "server error"});
+  }
+}

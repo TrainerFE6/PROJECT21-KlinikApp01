@@ -15,6 +15,8 @@ import LoginDokter from "./pages/LoginDokter";
 import RegisPasien from "./pages/RegisPasien";
 import DokterPage from "./pages/DokterPage";
 import DataPasienDokter from "./pages/DataPasienDokter";
+import RegisterDokter from "./components/super admin/RegisterDokter";
+
 
 
 const App = () => {
@@ -29,6 +31,7 @@ const App = () => {
           <Route path="/" element={<LoginDokter />} />
           <Route path="/Daftar" element={<RegisPasien />} />
           <Route path="/dokter/dataPasien" element={<DataPasienDokter />} />
+          <Route path="/registerDokter" element={<RegisterDokter />} />
           
           {/* <Route path="/services" element={<ServicesPage />} /> */}
         </Routes>
