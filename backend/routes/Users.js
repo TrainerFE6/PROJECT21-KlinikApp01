@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser,Login, Me, logout, getAlluser, updateUser} from '../controllers/Users.js';
+import { createUser,Login, Me, logout, getAlluser, updateUser, getRole} from '../controllers/Users.js';
 import { verifyUser } from '../middleware/AuthUser.js';
 
 
@@ -11,7 +11,8 @@ router.post('/userLogin',Login);
 router.get('/Me', verifyUser,Me);
 router.get('/users', verifyUser,getAlluser);
 router.delete('/logout', logout);
-router.patch('/updateUser/:id', verifyUser, updateUser)
+router.patch('/updateUser/:id', verifyUser, updateUser);
+router.get('/role', getRole);
 
 
 

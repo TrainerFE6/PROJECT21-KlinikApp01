@@ -94,7 +94,7 @@ export const MeDokter = async(req, res)=>{
   }
 
   const dokter = await Dokter.findOne({
-    attributes:['uuid', 'name', 'email', 'foto', 'spesialis'],
+    attributes:['id','uuid', 'name', 'email', 'foto', 'spesialis'],
     where:{
       uuid: req.session.dokterId
     }
@@ -103,6 +103,25 @@ export const MeDokter = async(req, res)=>{
   if(!dokter) return res.status(400).json({msg: "User tidak ditemukan"});
   res.status(200).json(dokter)
 }
+
+
+
+// MENDAPATKAN DOKTER SESUAI ID 
+export const getDokterById = async(req, res)=>{
+  const response = await Dokter.findOne({
+    attributes:['name','email','foto','spesialis', 'password'],
+    where:{
+      id: req.params.id
+    }
+  });
+
+  if(!response) res.status(404).json({msg: "Data tidak ditemukan"});
+
+  res.status(200).json(response);
+}
+
+
+
 
 // MENGAPDATE PROFILE DOKTER
 
@@ -150,13 +169,14 @@ export const updateDokter = async(req, res)=>{
 
       }
 
-      const name = req.body.name;
-      const {email, spesialis, confPassword, password} = req.body;
+      
+      const {name ,email, spesialis, confPassword, password} = req.body;
       const url = `${req.protocol}://${req.get("host")}/images/dokter/${fileName}`;
 
       if(password !== confPassword){
         res.status(400).json({msg: "Password dan confpassword tidak sesuai"});
       }
+      const hashPassword = await argon2.hash(password);
 
 
       const seps = await Spesialis.findOne({
@@ -172,13 +192,12 @@ export const updateDokter = async(req, res)=>{
       const spesialisId = seps.id;
 
       await Dokter.update({
-        nama: name,
+        name: name,
         email: email,
         foto: fileName,
         url: url,
         spesialis: spesialis,
-        confPassword: confPassword,
-        password: password,
+        password: hashPassword,
         spesialisId: spesialisId
       },{
         where:{
@@ -272,6 +291,9 @@ export const createJadwal = async(req, res)=> {
 }
 
 
+
+// MENAMPILKAN DATA SPESIALIS
+
 export const getSpesialis = async(req, res)=>{
 
   try {
@@ -284,3 +306,23 @@ export const getSpesialis = async(req, res)=>{
   }
 
 }
+
+
+// Create Spesialis 
+export const createSpesialis = async(req, res)=>{
+  const {name} = req.body; 
+  try {
+    await Spesialis.create({
+      name: name
+    })
+    res.status(200).json({msg: "Data Spesialis berhasil dibuat"});
+  } catch (error) {
+    res.status(500).json({msg:`${error.message}`});
+  }
+}
+
+
+
+
+  
+

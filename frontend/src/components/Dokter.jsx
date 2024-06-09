@@ -1,60 +1,54 @@
-import React from 'react';
-
-// Import gambar (gantilah dengan impor gambar yang sesuai)
-import Doctor1 from '../assets/images/about.jpg';
-import Doctor2 from '../assets/images/about.jpg';
-import Doctor3 from '../assets/images/about.jpg';
-
-const doctors = [
-  {
-    id: 1,
-    name: "Dr. Andi Wijaya",
-    specialty: "Umum",
-    practiceHours: "Senin - Jumat: 08:00 - 16:00",
-    image: Doctor1
-  },
-  {
-    id: 2,
-    name: "Dr. Budi Santoso",
-    specialty: "Pediatri",
-    practiceHours: "Senin - Jumat: 09:00 - 17:00",
-    image: Doctor2
-  },
-  {
-    id: 3,
-    name: "Dr. Citra Dewi",
-    specialty: "Ginekologi",
-    practiceHours: "Senin - Jumat: 10:00 - 18:00",
-    image: Doctor3
-  }
-];
+import React, {useState, useEffect} from 'react';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const Dokter = () => {
+  const [dokter, setDokter] = useState(null);
+  const [error, setError] = useState('');
+
+  useEffect(()=>{
+    const fetchDokterProfile = async()=>{
+      try {
+        const response = await axios.get('http://localhost:5000/dokterLogin', {
+          withCredentials: true // memanggil credencial saat mengirimkan API
+        });
+        setDokter(response.data);
+      } catch (error) {
+        setError('Gagal memuat profile dokter');
+        console.error('Error fetching dokter profile:', error.message);
+
+        
+      }
+    };
+    fetchDokterProfile();
+  }, []);
+
+  const handleUpdateProfile = () =>{
+    // tambahkan logika untuk menangani pembaruan profile
+    console.log('Mengapdate Profile')
+  }
+
+  if(error){
+    return <p>{error}</p>
+  }
+  if(!dokter){
+    return <p>Loading....</p>
+  }
   return (
-    <div className="container-fluid py-5">
-      <div className="container">
-        <div className="mb-5 text-center">
-          <h1 className="display-4">Profil Dokter</h1>
-        </div>
-        <div className="row g-5">
-          {doctors.map((doctor) => (
-            <div key={doctor.id} className="col-lg-4 col-md-6">
-              <div className="card h-100">
-                <img 
-                  src={doctor.image} 
-                  className="card-img-top" 
-                  alt={doctor.name} 
-                  style={{ objectFit: 'cover', height: '300px' }} 
-                />
-                <div className="card-body text-center">
-                  <h5 className="card-title">{doctor.name}</h5>
-                  <p className="card-text"><strong>Spesialis:</strong> {doctor.specialty}</p>
-                  <p className="card-text"><strong>Jam Praktik:</strong> {doctor.practiceHours}</p>
-                </div>
-              </div>
+    <div className="container py-5 d-flex justify-content-center align-items-center">
+      
+          <div className="card text-center" style={{ width: '50%'}}>
+            <div className="card-header">
+              Profile Dokter
             </div>
-          ))}
-        </div>
+            <div className="card-body">
+              <img src={`http://localhost:5000/images/dokter/${dokter.foto}`} alt={dokter.foto} style={{ maxWidth: '150px', height: 'auto', borderRadius:'50%' }}/>
+              <h5 className="card-title mt-3">{dokter.name}</h5>
+              <div className="card-text">Email : {dokter.email}</div>
+              <div className="card-text mb-3">Spessialis: {dokter.spesialis}</div>
+              <Link to={`/update-dokter/${dokter.id}`} className='btn btn-primary'>Update Profile</Link>
+            </div>
+         
       </div>
     </div>
   );

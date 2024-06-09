@@ -39,8 +39,8 @@ const Navbar = () => {
               <Link to="/tentang kami" className="nav-item nav-link">
                 tentang kami
               </Link>
-              <Link to="/pelayanan" className="nav-item nav-link">
-                pelayanan
+              <Link to="/dokter/dataPasien" className="nav-item nav-link">
+                Data Pasien
               </Link>
               <Link to="/dokter" className="nav-item nav-link">
                 dokter

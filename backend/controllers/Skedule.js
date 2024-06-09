@@ -75,3 +75,25 @@ export const getSkedule = async(req, res)=>{
     res.status(500).json({msg: "server error"});
   }
 }
+
+export const deleteScedule = async(req, res)=>{
+  const skedule = await Skedule.findOne({
+    where:{
+      id: req.params.id
+    }
+  });
+
+  if(!skedule) return res.status(404).json({msg: "skedule untuk pasien belum tersedia"});
+
+  try {
+    await Skedule.destroy({
+      where:{
+        id: req.params.id
+      }
+    });
+    res.status(200).json({msg: `skedule ${skedule.namePasien} telah dihapus`});
+  } catch (error) {
+    res.status(500).json({msg: "server error"});
+  }
+
+}

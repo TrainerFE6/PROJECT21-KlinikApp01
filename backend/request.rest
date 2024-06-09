@@ -15,11 +15,11 @@ Content-Type: application/json
 
 ###
 // lOGIN
-POST http://localhost:5000/LoginDokter
+POST http://localhost:5000/userLogin
 Content-Type: application/json
 
 {
-  "email": "fadillah@gmail.com",
+  "email": "rakh@gmail.com",
   "password": "123"
 }
 
@@ -92,3 +92,27 @@ Content-Type: application/json
 ###
 // BUAT SKEDULE PASIEN 
 POST http://localhost:5000/skedulePasien/3
+
+
+####
+// MENAMPILKASN SKEDULE PASIEN 
+GET http://localhost:5000/skedulePasien/3
+
+###
+// Membuat spessialis 
+
+POST http://localhost:5000/spesialis
+Content-Type: application/json
+
+{
+  "name" : "penyakit dalam"
+}
+
+###
+// MENDAPAT KAN DATA spesialis
+GET http://localhost:5000/spesialis
+
+
+### 
+// GET DOKTER BY ID 
+GET http://localhost:5000/getdokter/1

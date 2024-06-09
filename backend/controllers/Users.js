@@ -1,4 +1,5 @@
 import Users from "../models/UsersModel.js";
+import Role from "../models/RoleUser.js";
 
 import argon2  from "argon2";
 import path from "path";
@@ -165,3 +166,15 @@ export const updateUser = async(req, res)=> {
   }
 
 }
+
+
+// MENAMPILKAN DATA ROLE 
+export const getRole = async(req, res)=>{
+  const role = await Role.findAll({
+    attributes:['id', 'namarole']
+  });
+
+  if(!role) res.status(402).json({msg: "Data tidak ditemukan"});
+
+  res.status(200).json(role);
+};
