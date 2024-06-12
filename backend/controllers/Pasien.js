@@ -10,6 +10,7 @@ export const RegisterPasien = async(req, res)=>{
 
 
   const {name, alamat, ttl, nohandphone, keluhan, dokterSpesialis} = req.body;
+  const IdUser = req.session.IdUser
   try {
       await Pasien.create({
         name: name,
@@ -18,9 +19,9 @@ export const RegisterPasien = async(req, res)=>{
         nohandphone: nohandphone,
         keluhan: keluhan,
         dokterSPesialis: dokterSpesialis,
-        userId: req.userId
+        userId: IdUser
       });
-      res.status(201).json({msg: "Product created Successfuly"});
+      res.status(201).json({msg: "Pasien created Successfuly"});
     
     
   } catch (error) {
@@ -40,7 +41,7 @@ export const getPasienBydokter = async(req, res)=>{
 
     const dokter = await Dokter.findOne({
       where:{
-        uuid:req.session.dokterId
+        id:req.session.Id
       }
     });
 
@@ -54,7 +55,7 @@ export const getPasienBydokter = async(req, res)=>{
 
     let response;
     response = await Pasien.findAll({
-      attributes:['uuid', 'name', 'alamat', 'ttl', 'nohandphone', 'keluhan',],
+      attributes:['id', 'name', 'alamat', 'ttl', 'nohandphone', 'keluhan',],
       where:{
         dokterSPesialis: spesialis
       },
@@ -83,7 +84,7 @@ export const getPasienByPerawat = async(req, res)=>{
     if(!req.session.userId) return res.status(404).json({msg: "Anda belum login"});
     // res.status(402).json({msg: req.userId});
     const response = await Pasien.findAll({
-    attributes:['uuid', 'name', 'alamat', 'ttl', 'nohandphone','keluhan'],
+    attributes:['uuid', 'name', 'alamat', 'ttl', 'nohandphone','keluhan', 'dokterSPesialis'],
     where:{
       userId: req.userId
     },

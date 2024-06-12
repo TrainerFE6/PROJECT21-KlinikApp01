@@ -75,6 +75,7 @@ export const Login = async(req, res) =>{
 
   // membuat session yang diatur berdasarkan uuid
   req.session.userId = user.uuid;
+  req.session.IdUser = user.id;
   const uuid = user.uuid;
   const name = user.name;
   const email = user.email;
@@ -91,7 +92,7 @@ export const Me = async(req, res)=> {
   }
 
   const user = await Users.findOne({
-    attributes:['uuid', 'name', 'email', 'foto', 'nohandphone', 'role'],
+    attributes:['id','uuid', 'name', 'email', 'foto', 'nohandphone', 'role'],
     where:{
       uuid: req.session.userId
     }

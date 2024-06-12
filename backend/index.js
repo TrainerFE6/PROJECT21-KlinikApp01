@@ -5,11 +5,12 @@ import session from 'express-session';
 import dotenv from 'dotenv';
 import db from './config/database.js';
 
-import Role from './models/RoleUser.js';
+import Rekap from './models/RekapMedisModels.js';
 import SequelizeStore from 'connect-session-sequelize';
 import Userrouter from './routes/Users.js';
 import DokterRoute from './routes/Dokter.js'; 
 import PasienRouter from './routes/Pasien.js';
+import SuperAdmin from './routes/SuperAdmin.js';
 
 
 
@@ -26,19 +27,19 @@ const store = new sessionStore({
 
 // // untuk mengecek apakah database terhubung 
 
-async function initializeDatabase(){
-  try {
-    await db.authenticate();
-    console.log('Database Connected..')
+// async function initializeDatabase(){
+//   try {
+//     await db.authenticate();
+//     console.log('Database Connected..')
 
-    await db.sync({ alter: true});
-    console.log('Data dimodel telah dibuat ...')
-  } catch (error) {
-    console.log('Database tidak terhubung..', error);
-  }
-}
+//     await db.sync({ alter: true});
+//     console.log('Data dimodel telah dibuat ...')
+//   } catch (error) {
+//     console.log('Database tidak terhubung..', error);
+//   }
+// }
 
-initializeDatabase();
+// initializeDatabase();
 app.use(session({
   secret: process.env.SESS_SECRET,
   resave: false,
@@ -64,6 +65,7 @@ app.use(express.static("public"));
 app.use(Userrouter);
 app.use(DokterRoute);
 app.use(PasienRouter);
+app.use(SuperAdmin);
 
 app.listen(process.env.APP_PORT, ()=>{
 console.log(`Server Running on http://localhost:${process.env.APP_PORT}`);

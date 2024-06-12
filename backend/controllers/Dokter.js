@@ -249,7 +249,7 @@ export const deleteDokter = async(req, res)=>{
 export const getDokter = async(req, res)=>{
   try {
     const response = await Dokter.findAll({
-      attributes:['name', 'email', 'foto', 'url', 'spesialis']
+      attributes:['id','name', 'email', 'foto', 'url', 'spesialis']
     })
     res.status(200).json(response)
   } catch (error) {
@@ -272,13 +272,14 @@ export const createJadwal = async(req, res)=> {
     }
 
   });
-  const {waktu_pelayanan, jadwal_pelayanan} = req.body;
+  const {waktu_pelayanan, jadwal_pelayanan, waktu_selesai} = req.body;
 
 
   await JadwalDokter.create({
     nama_dokter: dokter.name,
     spesialis : dokter.spesialis,
     waktu_pelayanan: waktu_pelayanan,
+    waktu_selesai: waktu_selesai,
     jadwal_pelayanan: jadwal_pelayanan
   });
 
@@ -286,6 +287,33 @@ export const createJadwal = async(req, res)=> {
 
   } catch (error) {
     console.log(error.message);
+    
+  }
+}
+
+
+// MENDAPATKAN JADWAL DOKTER SESAI DOKTER YANG LOGIN
+export const getJadwalDokter = async(req, res)=>{
+  try {
+    if(!req.session.dokterId) return res.status(404).json({msg: "Sesi tidak ditemukan"});
+
+  const dokter = await Dokter.findOne({
+    where:{
+      id: req.session.Id
+    }
+  });
+
+  const jadwal = await JadwalDokter.findOne({
+    where:{
+      nama_dokter: dokter.name
+    }
+  });
+
+  if(!jadwal) return res.status(404).json({msg: "Jadwal tidak ditemukan"});
+
+  res.status(200).json(jadwal);
+    
+  } catch (error) {
     
   }
 }

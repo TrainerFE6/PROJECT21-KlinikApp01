@@ -2,6 +2,7 @@ import Dokter from "../models/DokterModels.js";
 import Pasien from "../models/PasienModel.js";
 import Skedule from "../models/SchduleModels.js";
 import JadwalDokter from "../models/JadwalDokter.js";
+import Users from "../models/UsersModel.js";
 
 export const SkedulePasien = async(req, res) => {
   if(!req.session.dokterId) return res.status(404).json({msg: "Session dokter tidak valid"});
@@ -75,6 +76,36 @@ export const getSkedule = async(req, res)=>{
     res.status(500).json({msg: "server error"});
   }
 }
+
+
+
+export const getSkedulePerawat = async(req, res) => {
+  if (!req.session.userId) return res.status(404).json({ msg: "fitur ini membutuhkan sesi" });
+
+  try {
+    const skedule = await Skedule.findOne({
+      where: {
+        namePasien: req.params.namaPasien
+      }
+    });
+
+    // Perbaikan logika pengecekan skedule
+    if (!skedule) {
+      return res.status(404).json({ msg: "skedule belum dibuat" });
+    }
+
+    res.status(200).json(skedule);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ msg: "Terjadi kesalahan di server" });
+  }
+};
+
+
+
+
+
+
 
 export const deleteScedule = async(req, res)=>{
   const skedule = await Skedule.findOne({

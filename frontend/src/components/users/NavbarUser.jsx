@@ -1,14 +1,14 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logout from "../service/authservice"; // Impor fungsi logout
+import logout from "../../service/authservice"; // Impor fungsi logout
 
-const Navbar = () => {
+const NavbarUser = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
       await logout();
-      navigate('/'); // Arahkan ke halaman login setelah logout
+      navigate('/LoginUser'); // Arahkan ke halaman login setelah logout
     } catch (error) {
       console.error("Gagal logout:", error);
     }
@@ -33,20 +33,20 @@ const Navbar = () => {
           </button>
           <div className="collapse navbar-collapse show" id="navbarCollapse">
             <div className="navbar-nav ms-auto py-0">
-              <Link to="/home" className="nav-item nav-link">
-                home
+              <Link to="/dashboardUser" className="nav-item nav-link">
+                dashboard
               </Link>
-              <Link to="/pemeriksaan" className="nav-item nav-link">
-                Jadwal Pemeriksaan
+              <Link to="/Pacient" className="nav-item nav-link">
+                Pacient
               </Link>
-              <Link to="/dokter/dataPasien" className="nav-item nav-link">
-                Data Pasien
+              <Link to="/skedule" className="nav-item nav-link">
+                Skedule Pasien
               </Link>
-              <Link to="/contact" className="nav-item nav-link">
-                Rekap Medis Pasien
+              <Link to="/rekapmedis" className="nav-item nav-link">
+                Rekap Medis
               </Link>
-              <Link to="/dokter" className="nav-item nav-link">
-                dokter
+              <Link to="/profileUser" className="nav-item nav-link">
+                Profile
               </Link>
               <button onClick={handleLogout} className="nav-item nav-link btn btn-link">
                 Logout
@@ -59,4 +59,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavbarUser;

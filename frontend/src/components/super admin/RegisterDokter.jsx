@@ -74,41 +74,51 @@ const RegisterDokter = () => {
   }
 
   return (
-    <div className="register-form" style={{ width: '300px', margin: '50px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '10px', boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)' }}>
-      <h2>Register</h2>
-      {errorMessage && <p className="error">{errorMessage}</p>}
-      <form onSubmit={handleSubmit} method='post'>
-        <div className="form-group">
-          <label htmlFor="name">Nama Dokter</label>
-          <input type="text" id="name" name='name' value={formData.name} onChange={handleChange} placeholder='Enter Name' style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }} />
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-header">
+              <h2 className="text-center">Register Dokter</h2>
+            </div>
+            <div className="card-body">
+              {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
+              <form onSubmit={handleSubmit} method='post'>
+                <div className="form-group">
+                  <label htmlFor="name">Nama Dokter</label>
+                  <input type="text" id="name" name='name' value={formData.name} onChange={handleChange} className="form-control" placeholder='Masukkan Nama' />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="email">Email:</label>
+                  <input type="email" id="email" name='email' value={formData.email} onChange={handleChange} className="form-control" placeholder='Masukkan Email' />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="password">Password:</label>
+                  <input type="password" id="password" name='password' value={formData.password} onChange={handleChange} className="form-control" placeholder='*********' />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="confirmPassword">Confirm Password:</label>
+                  <input type="password" id="confirmPassword" name='confPassword' value={formData.confPassword} onChange={handleChange} className="form-control" placeholder='*********' />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="spesialis">Spesialis:</label>
+                  <select value={selectedSpesialis} onChange={handleSelectChange} className="form-control">
+                    <option value="">Pilih Spesialis .....</option>
+                    {spesialis.map((item) => (
+                      <option key={item.id} value={item.name}>{item.name}</option>
+                    ))}
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="photo">Photo:</label>
+                  <input type="file" id="photo" name='foto' onChange={handleChange} className="form-control-file" />
+                </div>
+                <button type="submit" className="btn btn-primary btn-block">Daftar</button>
+              </form>
+            </div>
+          </div>
         </div>
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          <input type="email" id="email" name='email' value={formData.email} onChange={handleChange} placeholder='Enter Email' style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }} />
-        </div>
-        <div className="form-group">
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" name='password' value={formData.password} onChange={handleChange} placeholder='*********' style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }} />
-        </div>
-        <div className="form-group">
-          <label htmlFor="confirmPassword">Confirm Password:</label>
-          <input type="password" id="confirmPassword" name='confPassword' value={formData.confPassword} onChange={handleChange} placeholder='*********' style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }} />
-        </div>
-        <div className="form-group">
-          <label htmlFor="spesialis">Spesialis:</label>
-          <select value={selectedSpesialis} onChange={handleSelectChange} style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }}>
-            <option value="">Pilih Spesialis .....</option>
-            {spesialis.map((item) => (
-              <option key={item.id} value={item.name}>{item.name}</option>
-            ))}
-          </select>
-        </div>
-        <div className="form-group">
-          <label htmlFor="photo">Photo:</label>
-          <input type="file" id="photo" name='foto' onChange={handleChange} style={{ width: '100%', padding: '8px', boxSizing: 'border-box' }} />
-        </div>
-        <button type="submit" style={{ width: '100%', padding: '10px', backgroundColor: '#007bff', border: 'none', color: 'white', borderRadius: '5px', cursor: 'pointer', marginTop: '15px' }}>Daftar</button>
-      </form>
+      </div>
     </div>
   );
 };

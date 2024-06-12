@@ -1,6 +1,7 @@
 import express from 'express';
 import { createUser,Login, Me, logout, getAlluser, updateUser, getRole} from '../controllers/Users.js';
 import { verifyUser } from '../middleware/AuthUser.js';
+import { getSkedulePerawat } from '../controllers/Skedule.js';
 
 
 
@@ -13,6 +14,7 @@ router.get('/users', verifyUser,getAlluser);
 router.delete('/logout', logout);
 router.patch('/updateUser/:id', verifyUser, updateUser);
 router.get('/role', getRole);
+router.get('/skedule/:namaPasien', getSkedulePerawat);
 
 
 

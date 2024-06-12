@@ -116,3 +116,30 @@ GET http://localhost:5000/spesialis
 ### 
 // GET DOKTER BY ID 
 GET http://localhost:5000/getdokter/1
+
+### 
+// GET ROLE
+GET http://localhost:5000/role
+
+###
+// Menambahkan Data Obat
+
+POST http://localhost:5000/obat
+Content-Type: application/json
+
+{
+  "name_obat" : "kosong",
+  "Jenis_obat": "kosong",
+  "stok":"400000",
+  "harga": 30000
+}
+
+
+###
+//Menampilkan data Obat 
+GET http://localhost:5000/obat
+
+
+###
+//DELETE OBAT
+DELETE http://localhost:5000/deleteObat/4

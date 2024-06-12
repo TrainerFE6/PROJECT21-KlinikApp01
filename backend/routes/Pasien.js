@@ -8,7 +8,7 @@ import { getSkedule } from '../controllers/Skedule.js';
 
 const router = express.Router();
 
-router.post('/pasien', verifyUser, RegisterOnly, RegisterPasien);
+router.post('/pasien', RegisterPasien);
 router.get('/pasienPerawat',  verifyUser,getPasienByPerawat);
 router.get('/pasienDokter', getPasienBydokter)
 router.get('/pasien/:id',  getPasienById);

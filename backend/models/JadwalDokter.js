@@ -29,6 +29,15 @@ const JadwalDokter = db.define('jadwal', {
     }
 
   },
+  waktu_selesai:{
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate:{
+      notEmpty: true
+     
+    }
+
+  },
   jadwal_pelayanan:{
     type: DataTypes.STRING,
     allowNull:false,

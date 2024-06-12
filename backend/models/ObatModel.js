@@ -25,11 +25,11 @@ const Obat = db.define('obat', {
     allowNull: false,
     validate: {
       notEmpty: true,
-      len: [3, 255]
+      len: [0, 255]
     }
   },
   harga: {
-    type: DataTypes.STRING,
+    type: DataTypes.INTEGER,
     allowNull: false,
     validate:{
       notEmpty: true
