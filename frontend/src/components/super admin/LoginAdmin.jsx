@@ -4,7 +4,7 @@ import {useNavigate} from 'react-router-dom';
 
 axios.defaults.withCredentials = true;
 
-const LoginForm = () => {
+const LoginAdmin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -13,14 +13,14 @@ const LoginForm = () => {
   const handleSubmit = async(e) => {
     e.preventDefault();
    try {
-    const response = await axios.post("http://localhost:5000/LoginDokter", {
+    const response = await axios.post("http://localhost:5000/LoginAdmin", {
       email,
       password,
     });
     console.log(response.data);
-    localStorage.setItem('dokterData', JSON.stringify(response.data))
+    localStorage.setItem('adminData', JSON.stringify(response.data))
     // simpan data dokter ke state atau localStorage sesuai kebutuhan
-    navigate('/Home'); 
+    navigate('/dashboardAdmin'); 
    } catch (error) {
     if(error.response){
       setErrorMessage(error.response.data.msg);
@@ -32,7 +32,7 @@ const LoginForm = () => {
 
   return (
     <div className="login-form" style={{ width: '300px', margin: '50px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '10px', boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)' }}>
-      <h2>Login Dokter</h2>
+      <h2>Login Sebagai Admin</h2>
       {errorMessage && <p className="error">{errorMessage}</p>}
       <form onSubmit={handleSubmit}>
         <div className="form-group">
@@ -62,4 +62,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default LoginAdmin;

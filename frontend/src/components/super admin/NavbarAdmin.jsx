@@ -1,13 +1,14 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { logout } from "../service/authservice";
-const Navbar = () => {
+import { logoutUser } from "../../service/authservice";
+
+const NavbarAdmin = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await logout();
-      navigate('/'); // Arahkan ke halaman login setelah logout
+      await logoutUser();
+      navigate('/LoginUser'); // Arahkan ke halaman login setelah logout
     } catch (error) {
       console.error("Gagal logout:", error);
     }
@@ -32,23 +33,20 @@ const Navbar = () => {
           </button>
           <div className="collapse navbar-collapse show" id="navbarCollapse">
             <div className="navbar-nav ms-auto py-0">
-              <Link to="/home" className="nav-item nav-link">
-                home
+              <Link to="/dashboardAdmin" className="nav-item nav-link">
+                dashboard
               </Link>
-              <Link to="/pemeriksaan" className="nav-item nav-link">
-                My Schedule
+              <Link to="/halamanDokter" className="nav-item nav-link">
+                Dokter
               </Link>
-              <Link to="/jadwalPemeriksaan" className="nav-item nav-link">
-                Jadwal Pemeriksaan
+              <Link to="/obatAdmin" className="nav-item nav-link">
+                Data Obat
               </Link>
-              <Link to="/dokter/dataPasien" className="nav-item nav-link">
-                Data Pasien
+              <Link to="/pasienAdmin" className="nav-item nav-link">
+                Pasien
               </Link>
-              <Link to="/RekapMedis" className="nav-item nav-link">
-                Rekap Medis Pasien
-              </Link>
-              <Link to="/dokter" className="nav-item nav-link">
-                dokter
+              <Link to="/profileAdmin" className="nav-item nav-link">
+                Profile
               </Link>
               <button onClick={handleLogout} className="nav-item nav-link btn btn-link">
                 Logout
@@ -61,4 +59,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavbarAdmin;

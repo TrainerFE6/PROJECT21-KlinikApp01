@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 
 const PasienTable = () => {
   const [pasien, setPasien] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [notification, setNotification] = useState(null); // State untuk notifikasi
+  const [skeduleCreated, setSkeduleCreated] = useState({}); // State untuk status skedule
 
   useEffect(() => {
     const fetchPasien = async () => {
@@ -21,11 +21,15 @@ const PasienTable = () => {
     };
 
     fetchPasien();
+
+    // Muat status skedule dari localStorage
+    const savedSkeduleCreated = JSON.parse(localStorage.getItem('skeduleCreated')) || {};
+    setSkeduleCreated(savedSkeduleCreated);
   }, []);
 
   // Fungsi untuk menampilkan notifikasi
-  const showNotification = () => {
-    setNotification('Skedule berhasil dibuat!'); // Set notifikasi
+  const showNotification = (message) => {
+    setNotification(message); // Set notifikasi
     setTimeout(() => {
       setNotification(null); // Hilangkan notifikasi setelah beberapa detik
     }, 3000); // Sesuaikan dengan kebutuhan
@@ -35,7 +39,10 @@ const PasienTable = () => {
   const createSkedule = async (id) => {
     try {
       await axios.post(`http://localhost:5000/skedulePasien/${id}`);
-      showNotification(); // Tampilkan notifikasi setelah skedule berhasil dibuat
+      const updatedSkeduleCreated = { ...skeduleCreated, [id]: true };
+      setSkeduleCreated(updatedSkeduleCreated); // Tandai skedule sebagai sudah dibuat
+      localStorage.setItem('skeduleCreated', JSON.stringify(updatedSkeduleCreated)); // Simpan ke localStorage
+      showNotification('Skedule berhasil dibuat!'); // Tampilkan notifikasi setelah skedule berhasil dibuat
     } catch (error) {
       setError(error.response?.data?.msg || 'Terjadi kesalahan');
     }
@@ -70,8 +77,9 @@ const PasienTable = () => {
                 <button
                   onClick={() => createSkedule(item.id)}
                   className="btn btn-danger"
+                  disabled={skeduleCreated[item.id]} // Disable button jika skedule sudah dibuat
                 >
-                  Buat Skedule
+                  {skeduleCreated[item.id] ? 'Skedule Telah Dibuat' : 'Buat Skedule'} {/* Ubah teks button */}
                 </button>
               </td>
             </tr>

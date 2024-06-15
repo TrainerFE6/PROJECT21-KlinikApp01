@@ -98,6 +98,30 @@ export const getPasienByPerawat = async(req, res)=>{
   }
 }
 
+
+
+// MENDAPATKAN AKTIFITAS BARU PASIEN 
+export const getPasienBaru = async (req, res) => {
+  try {
+    if (!req.session.userId) return res.status(404).json({ msg: "Anda belum login" });
+    const pasienBaru = await Pasien.findAll({
+      attributes: ['uuid', 'name', 'alamat', 'ttl', 'nohandphone', 'keluhan', 'dokterSPesialis'],
+      where: {
+        userId: req.session.IdUser
+      },
+      include: [{
+        model: Users, attributes: ['name', 'email']
+      }],
+      order: [['createdAt', 'DESC']], // Order by latest
+      limit: 5 // Limit to the latest 5 activities
+    });
+    console.log('pasien baru', pasienBaru);
+    res.status(200).json(pasienBaru);
+  } catch (error) {
+    res.status(500).json({ msg: 'Terjadi kesalahan', error });
+  }
+};
+
 // MENDAPATKAN DATA PASIEN BERDASARKAN ID 
 export const getPasienById = async(req, res)=>{
   try {

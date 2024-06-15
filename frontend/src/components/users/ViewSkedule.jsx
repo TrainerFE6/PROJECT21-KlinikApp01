@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 const SkedulePerawat = () => {
   const { namaPasien } = useParams();
@@ -45,7 +45,10 @@ const SkedulePerawat = () => {
         <div className="card-footer text-muted">
           Terima kasih telah menggunakan layanan kami
         </div>
+
+      
       </div>
+      <Link to={'/Pacient'} className='btn btn-danger'>Kembali</Link>
     </div>
   );
 };

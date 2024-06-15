@@ -1,13 +1,13 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import logout from "../../service/authservice"; // Impor fungsi logout
+import { logoutUser } from "../../service/authservice";
 
 const NavbarUser = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await logoutUser();
       navigate('/LoginUser'); // Arahkan ke halaman login setelah logout
     } catch (error) {
       console.error("Gagal logout:", error);
@@ -39,10 +39,10 @@ const NavbarUser = () => {
               <Link to="/Pacient" className="nav-item nav-link">
                 Pacient
               </Link>
-              <Link to="/skedule" className="nav-item nav-link">
-                Skedule Pasien
+              <Link to="/dataObat" className="nav-item nav-link">
+                Data Obat
               </Link>
-              <Link to="/rekapmedis" className="nav-item nav-link">
+              <Link to="/rekap-medis-perawat" className="nav-item nav-link">
                 Rekap Medis
               </Link>
               <Link to="/profileUser" className="nav-item nav-link">

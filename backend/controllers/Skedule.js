@@ -3,6 +3,7 @@ import Pasien from "../models/PasienModel.js";
 import Skedule from "../models/SchduleModels.js";
 import JadwalDokter from "../models/JadwalDokter.js";
 import Users from "../models/UsersModel.js";
+import { updateDokter } from "./Dokter.js";
 
 export const SkedulePasien = async(req, res) => {
   if(!req.session.dokterId) return res.status(404).json({msg: "Session dokter tidak valid"});
@@ -102,6 +103,38 @@ export const getSkedulePerawat = async(req, res) => {
 };
 
 
+export const getSkeduleDokter = async(req, res)=>{
+  if(!req.session.Id) return res.status(404).json({msg: "fitur ini membutuhkan sesi"});
+  try {
+    const id = req.session.Id;
+    const dokter = await Dokter.findOne({
+      where:{
+        id: id
+      }
+    });
+    console.log(dokter.name)
+    if(!dokter){
+      console.log("data dokter tidak ditemukan");
+      return res.status(404).json({msg: "Data dokter tidak ditemukan"});
+
+    }
+
+    const skedule = await Skedule.findAll({
+      where:{
+        namedokter: dokter.name
+      }
+    });
+
+    res.status(200).json(skedule);
+
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json(error.message);
+    
+  }
+}
+
+
 
 
 
@@ -128,3 +161,50 @@ export const deleteScedule = async(req, res)=>{
   }
 
 }
+
+
+export const updateSkedule = async(req, res)=>{
+  if(!req.session.Id) return res.status(404).json({msg: "fitur ini membutuhkan sesi"});
+
+  try {
+    const {sceduledate, sceduletime, namedokter, namepasien}= req.body;
+
+    await Skedule.update({
+      sceduletime: sceduletime,
+      sceduledate: sceduledate,
+      namedokter: namedokter,
+      namepasien: namepasien
+    },{
+      where:{
+        noantrian: req.params.noantrian
+      }
+    });
+
+    res.status(200).json({msg: `skedule ${namepasien} sudah diproses`});
+  } catch (error) {
+    res.status(500).json(error.message);
+  }
+}
+
+
+export const getSkeduleById = async(req, res)=>{
+  if(!req.session.Id) return res.status(404).json({msg: "fitur ini membuntuh kan sesi"});
+  try {
+    const skedule = await Skedule.findOne({
+      attributes:['noantrian','title', 'sceduledate', 'sceduletime', 'namedokter', 'namepasien', 'dokterSpesialis'],
+      where:{
+        noantrian:req.params.noantrian
+      }
+    });
+    
+    res.status(200).json(skedule);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json(error.message);
+    
+  }
+}
+
+
+
+// mendapatkan jumlah rekapPerawat

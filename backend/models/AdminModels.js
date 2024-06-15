@@ -3,74 +3,63 @@ import db from "../config/database.js";
 
 
 
+
+
 const {DataTypes} = Sequelize;
 
-const Rekap = db.define('rekap_medis', {
-  nama_pasien:{
+const Admin = db.define('admin', {
+  uuid:{
     type: DataTypes.STRING,
-    allowNull: false,
-    validate:{
-      notEmpty: true
-    }
-  },
-   nama_dokter:{
-    type: DataTypes.STRING,
-    allowNull: false,
-    validate:{
-      notEmpty: true,
-    }
-  },
-  keluhan_pasien:{
-    type: DataTypes.TEXT,
+    defaultValue: DataTypes.UUIDV4,
     allowNull: false,
     validate: {
+      notEmpty: true
+    }
+  }, 
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate:{
       notEmpty: true,
-      
+      len: [3, 100]
     }
   },
-  Obat_pasien: {
+  email:{
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate:{
+      notEmpty: true,
+      isEmail: true
+    }
+  },
+  password:{
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate:{
+      notEmpty: true
+     
+    }
+
+  },
+  foto:{
+    type: DataTypes.STRING,
+    allowNull: false,
+    validate:{
+      notEmpty: true,
+      len:[0, 255]
+    }
+  },
+  url:{
     type: DataTypes.STRING,
     allowNull: false,
     validate:{
       notEmpty: true
     }
-  },
-  jenis_pemeriksaan: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-    validate:{
-      notEmpty: true,
-    }
-  },
-  hasil_pemeriksaan:{
-    type: DataTypes.TEXT,
-    allowNull: false,
-    validate:{
-      notEmpty: true,
-    }
-
-  },
-  pesan : {
-    type: DataTypes.TEXT,
-    allowNull: false,
-    validate:{
-      notEmpty: true,
-    }
-
-  },
-  biayaPemeriksaan : {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  isProcessed: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: false,
   }
-
-},{
+}, {
   freezeTableName: true
 });
 
 
 
-export default Rekap;
+export default Admin;

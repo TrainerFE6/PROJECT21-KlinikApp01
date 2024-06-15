@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 function JadwalDokter() {
   const [jadwal, setJadwal] = useState({});
@@ -27,9 +27,9 @@ function JadwalDokter() {
     <div className="container mt-5">
       <div className="row">
         <div className="col-md-6 offset-md-3">
-          <h2 className="text-center mb-4">Jadwal Dokter</h2>
+          <h2 className="text-center mb-4" style={{ fontSize:'30px', fontWeight:'bold', color:"CaptionText"}}>Jadwal Anda</h2>
           <button className='btn btn-primary mb-4' onClick={handleCreateJadwal}>Buat Jadwal</button>
-          <div className="card">
+          <div className="card text-center">
             <div className="card-header">
               Jadwal Dokter : Dr. {jadwal.nama_dokter}
             </div>
@@ -40,6 +40,7 @@ function JadwalDokter() {
               <p className="card-text">Waktu Selesai: {jadwal.waktu_selesai}</p>
               <p className="card-text">Jadwal Pelayanan: {jadwal.jadwal_pelayanan}</p>
               {/* Tambahkan elemen lain sesuai kebutuhan */}
+              <Link to={`/updateJadwal/${jadwal.id}`} className='btn btn-info mt-4'>Update Jadwal</Link>
             </div>
           </div>
         </div>

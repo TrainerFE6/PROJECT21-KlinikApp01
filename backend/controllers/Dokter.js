@@ -314,8 +314,66 @@ export const getJadwalDokter = async(req, res)=>{
   res.status(200).json(jadwal);
     
   } catch (error) {
+    console.log(error.message);
+    res.status(500).json(error.message);
     
   }
+}
+
+
+export const getJadwalById = async(req, res)=>{
+  try {
+    const jadwal = await JadwalDokter.findOne({
+      attributes:['id','nama_dokter', 'spesialis', 'waktu_pelayanan', 'waktu_selesai', 'jadwal_pelayanan'],
+      where:{
+        id: req.params.id
+      }
+    })
+
+    res.status(200).json(jadwal);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json(error.message);
+    
+  }
+}
+
+
+export const updateJadwal = async(req, res)=>{
+  if(!req.session.Id) return res.status(404).json({msg: "fitur ini membutuhkan sesi"});
+ try {
+  const dokter = await Dokter.findOne({
+    where:{
+      id: req.session.Id
+    }
+  });
+
+  if(!dokter){
+    return res.status(400).json({msg: "data dokter tidak ditemukan"});
+  }
+
+  const {waktu_pelayanan, waktu_selesai, jadwal_pelayanan} = req.body;
+
+  await JadwalDokter.update({
+    nama_dokter: dokter.name,
+    spesialis: dokter.spesialis,
+    waktu_pelayanan: waktu_pelayanan,
+    waktu_selesai: waktu_selesai,
+    jadwal_pelayanan: jadwal_pelayanan
+
+  },{
+    where:{
+      id:req.params.id
+    }
+  });
+
+  res.status(200).json({msg:'jadwal telah di update'});
+ } catch (error) {
+  res.status(500).json(error.message);
+  
+ }
+
+  
 }
 
 
@@ -348,6 +406,8 @@ export const createSpesialis = async(req, res)=>{
     res.status(500).json({msg:`${error.message}`});
   }
 }
+
+
 
 
 

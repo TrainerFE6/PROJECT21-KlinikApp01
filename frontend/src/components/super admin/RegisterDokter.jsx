@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const RegisterDokter = () => {
   const [formData, setFormData] = useState({
@@ -62,7 +63,7 @@ const RegisterDokter = () => {
       console.log('Success:', response);
       alert('Register berhasil!');  // Menampilkan alert setelah pendaftaran berhasil
       setErrorMessage('');
-      navigate('/');  // Mengarahkan ke halaman beranda setelah pendaftaran berhasil
+      navigate('/halamanDokter');  // Mengarahkan ke halaman beranda setelah pendaftaran berhasil
     } catch (error) {
       console.error('Error occurred:', error);
       setErrorMessage(error.response ? error.response.data : error.message);
@@ -77,8 +78,10 @@ const RegisterDokter = () => {
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-md-6">
+        <Link to={'/halamanDokter'} className='btn btn-danger mb-3'>Kembali</Link>
           <div className="card">
             <div className="card-header">
+              
               <h2 className="text-center">Register Dokter</h2>
             </div>
             <div className="card-body">

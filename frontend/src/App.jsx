@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Route, Routes, useLocation } from "react-route
 
 // Import Components
 import Navbar from "./components/Navbar";
-import Footer from "./components/Footer";
 
 // Import Pages
 import Home from "./pages/Home";
@@ -19,18 +18,44 @@ import RegisterDokter from "./pages/RegisDokter";
 import RegisUser from "./pages/RegisUser";
 import UpdateDokter from "./components/UpdateDokter";
 import CrateSkepasien from "./pages/CrateSkepasien";
+import DoctorSchedule from "./components/JadwalPemeriksaan";
+import UpdateJadwalForm from "./components/updateJadwal";
+import UpdateSkeduleForm from "./components/UpdateSkedule";
+import PasienList from "./components/RekapMedis";
+import CreateRekapMedis from "./components/CreateRekapMedis";
 
 // untuk user
 import NavUser from "./components/users/NavbarUser";
 import UserLogin from "./pages/users/LoginUser";
-import DashboardUser from "./pages/users/dashboardUser"; // Pastikan nama file ini benar
+import DashboardUser from "./pages/users/dashboardUser";
 import UserProfile from "./pages/users/UserProfile";
 import ShowPacient from "./pages/users/ShowPacient";
 import RegisPasien from "./pages/users/RegisPasient";
 import ViewSKed from "./pages/users/ViewSKed";
+import DataObat from "./components/users/DataObat";
+import RekapMedisPerawat from "./components/users/RekapMedisPerawat";
+import ViewRekapMedis from "./components/users/ViewRekapMedis";
+import UpdateRekapPerawat from "./components/users/ProsesRekap";
+
+// UNTUK ADMIN
+import NavbarAdmin from "./components/super admin/NavbarAdmin";
+import RegisterAdmin from "./components/super admin/RegisterAdmin";
+import LoginAdmin from "./components/super admin/LoginAdmin";
+import DashboardAdmin from "./components/super admin/DashboardAdmin";
+import HalamanDokter from "./components/super admin/HalamanDokter";
+import Spesialis from "./components/super admin/spesialis";
+import RegisterSpesialis from "./components/super admin/CreateSpesialis";
 
 const AppContent = () => {
   const location = useLocation();
+  // admin path 
+  const adminPaths =[
+    '/LoginAdmin',
+    '/dashboardAdmin',
+    '/halamanDokter',
+    '/spesialis',
+    '/createSPesialis'
+  ]
 
   // Define paths for user and doctor pages
   const userPaths = [
@@ -40,8 +65,9 @@ const AppContent = () => {
     "/profileUser",
     "/Pacient",
     "/createPasien",
-    // Sesuaikan path ini dengan yang digunakan
-    // Add more user-specific paths here
+    "/dataObat",
+    "/rekap-medis-perawat",
+    "/view-rekap-medis/:name"
   ];
 
   const doctorPaths = [
@@ -52,8 +78,12 @@ const AppContent = () => {
     "/pemeriksaan",
     "/createJadwal",
     "/create-skedule",
-    // Add more doctor-specific paths here
+    "/jadwalPemeriksaan",
+    "/updateJadwal/:id",
   ];
+
+  // adminPath 
+  const isAdminPath = adminPaths.includes(location.pathname);
 
   // Check if the current path is a user path
   const isUserPath = userPaths.includes(location.pathname);
@@ -68,6 +98,10 @@ const AppContent = () => {
     "/LoginUser",
     "/createJadwal",
     "/Pacient",
+    "/dataObat",
+    "/view-rekap-medis/:name",
+    "/Admin",
+    '/createSPesialis'
   ];
 
   // Use regex to match dynamic paths
@@ -75,20 +109,31 @@ const AppContent = () => {
 
   // Function to determine if current path matches the dynamic path
   const isViewSkedulePath = viewSkedulePath.test(location.pathname);
+  const isViewRekapMedisPath = /^\/view-rekap-medis\/[^/]+$/.test(location.pathname);
 
   return (
     <>
-      {!isViewSkedulePath && isUserPath && location.pathname === "/dashboardUser" && <NavUser />}
-      {!isViewSkedulePath && isUserPath && location.pathname === "/profileUser" && <NavUser />}
-      {!isViewSkedulePath && isUserPath && location.pathname === "/Pacient" && <NavUser />}
-      {!isViewSkedulePath && !isUserPath && !noNavbarFooterPaths.includes(location.pathname) && <Navbar />}
+    {/* user */}
+      {!isViewSkedulePath && !isViewRekapMedisPath &&!isAdminPath && isUserPath && location.pathname === "/dashboardUser" && <NavUser />}
+      {!isViewSkedulePath && !isViewRekapMedisPath &&!isAdminPath  && isUserPath && location.pathname === "/profileUser" && <NavUser />}
+      {!isViewSkedulePath && !isViewRekapMedisPath &&!isAdminPath  && isUserPath && location.pathname === "/Pacient" && <NavUser />}
+      {!isViewSkedulePath && !isViewRekapMedisPath &&!isAdminPath  && isUserPath && location.pathname === "/dataObat" && <NavUser />}
+      {!isViewSkedulePath && !isViewRekapMedisPath &&!isAdminPath  && isUserPath && location.pathname === "/rekap-medis-perawat" && <NavUser />}
+
+
+      {/* admin */}
+      {!isViewSkedulePath && !isViewRekapMedisPath &&!isUserPath &&isAdminPath && location.pathname === "/dashboardAdmin" && <NavbarAdmin />}
+      {!isViewSkedulePath && !isViewRekapMedisPath &&!isUserPath &&isAdminPath && location.pathname === "/halamanDokter" && <NavbarAdmin />}
+      {!isViewSkedulePath && !isViewRekapMedisPath &&!isUserPath &&isAdminPath && location.pathname === "/spesialis" && <NavbarAdmin />}
+
+
+      {!isViewSkedulePath && !isViewRekapMedisPath &&!isAdminPath  && !isUserPath && !noNavbarFooterPaths.includes(location.pathname) && <Navbar />}
       <Routes>
         <Route path="/home" element={<Home />} />
         <Route path="/Tentang Kami" element={<TentangKami />} />
         <Route path="/Pelayanan" element={<PelayananPage />} />
         <Route path="/dokter" element={<DokterPage />} />
         <Route path="/" element={<LoginDokter />} />
-       
         <Route path="/dokter/dataPasien" element={<DataPasienDokter />} />
         <Route path="/pemeriksaan" element={<JadwalDoc />} />
         <Route path="/createJadwal" element={<DocCreateJadwal />} />
@@ -96,16 +141,33 @@ const AppContent = () => {
         <Route path="/registerUser" element={<RegisUser />} />
         <Route path="/update-dokter/:id" element={<UpdateDokter />} />
         <Route path="/create-skedule/:id" element={<CrateSkepasien />} />
+        <Route path="/jadwalPemeriksaan" element={<DoctorSchedule />} />
+        <Route path="/updateJadwal/:id" element={<UpdateJadwalForm />} />
+        <Route path="/updateSkedule/:noantrian" element={<UpdateSkeduleForm />} />
+        <Route path="/RekapMedis" element={<PasienList />} />
+        <Route path="/create-rekap-medis/:noantrian" element={<CreateRekapMedis />} />
 
         {/* untuk user */}
         <Route path="/LoginUser" element={<UserLogin />} />
-        <Route path="/dashboardUser" element={<DashboardUser />} /> {/* Pastikan path ini sesuai */}
-        <Route path="/profileUser" element={<UserProfile />} /> {/* Pastikan path ini sesuai */}
-        <Route path="/Pacient" element={<ShowPacient />} /> {/* Pastikan path ini sesuai */}
-        <Route path="/createPasien" element={<RegisPasien />} /> {/* Pastikan path ini sesuai */}
-        <Route path="/view-skedule/:namaPasien" element={<ViewSKed />} /> {/* Pastikan path ini sesuai */}
+        <Route path="/dashboardUser" element={<DashboardUser />} />
+        <Route path="/profileUser" element={<UserProfile />} />
+        <Route path="/Pacient" element={<ShowPacient />} />
+        <Route path="/createPasien" element={<RegisPasien />} />
+        <Route path="/view-skedule/:namaPasien" element={<ViewSKed />} />
+        <Route path="/dataObat" element={<DataObat />} />
+        <Route path="/rekap-medis-perawat" element={<RekapMedisPerawat />} />
+        <Route path="/view-rekap-medis/:name" element={<ViewRekapMedis />} />
+        <Route path="/updateRekap/:id" element={<UpdateRekapPerawat />} />
+
+        {/* untuk admin */}
+        <Route path="/Admin" element={<RegisterAdmin />} />
+        <Route path="/LoginAdmin" element={<LoginAdmin />} />
+        <Route path="/dashboardAdmin" element={<DashboardAdmin />} />
+        <Route path="/halamanDokter" element={<HalamanDokter />} />
+        <Route path="/spesialis" element={<Spesialis />} />
+        <Route path="/createSPesialis" element={<RegisterSpesialis />} />
+
       </Routes>
-      {!isViewSkedulePath && !isDoctorPath && !noNavbarFooterPaths.includes(location.pathname) && <Footer />}
     </>
   );
 };
