@@ -46,7 +46,7 @@ const ProfileUser = () => {
               <h5 className="card-title mt-3">{user.name}</h5>
               <div className="card-text">Email : {user.email}</div>
               <div className="card-text mb-3">Jabatan: {user.role}</div>
-              <Link to={`/update-dokter/${user.id}`} className='btn btn-primary'>Update Profile</Link>
+              <Link to={`/update-user/${user.id}`} className='btn btn-primary'>Update Profile</Link>
             </div>
          
       </div>

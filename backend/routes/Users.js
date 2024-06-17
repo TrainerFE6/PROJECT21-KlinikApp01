@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser,Login, Me, logout, getAlluser, updateUser, getRole} from '../controllers/Users.js';
+import { createUser,Login, Me, logout, getAlluser, updateUser, getRole, getUserById} from '../controllers/Users.js';
 import { verifyUser } from '../middleware/AuthUser.js';
 import { getSkedulePerawat } from '../controllers/Skedule.js';
 import { getRekap, updateRekap, getRekapById, getJumlahRekap } from '../controllers/Rekap.js';
@@ -11,9 +11,10 @@ const router = express.Router();
 router.post('/users', createUser);
 router.post('/userLogin',Login);
 router.get('/Me', verifyUser,Me);
-router.get('/users', verifyUser,getAlluser);
+router.get('/users',getAlluser);
+router.get('/user/:id', getUserById)
 router.delete('/logout', logout);
-router.patch('/updateUser/:id', verifyUser, updateUser);
+router.put('/updateUser/:id',  updateUser);
 router.get('/role', getRole);
 router.get('/skedule/:namaPasien', getSkedulePerawat);
 router.get('/rekap/:name',getRekap);

@@ -8,7 +8,7 @@ const NavbarUser = () => {
   const handleLogout = async () => {
     try {
       await logoutUser();
-      navigate('/LoginUser'); // Arahkan ke halaman login setelah logout
+      navigate('/'); // Arahkan ke halaman login setelah logout
     } catch (error) {
       console.error("Gagal logout:", error);
     }

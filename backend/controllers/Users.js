@@ -1,8 +1,10 @@
 import Users from "../models/UsersModel.js";
 import Role from "../models/RoleUser.js";
 
-import argon2  from "argon2";
-import path from "path";
+import  argon2  from "argon2";
+import path, { sep } from 'path';
+import fs from 'fs';
+import { where } from "sequelize";
 
 
 
@@ -101,6 +103,25 @@ export const Me = async(req, res)=> {
   res.status(200).json(user);
 }
 
+// GET USER BY ID 
+export const getUserById = async(req, res)=>{
+
+  try {
+    const user = await Users.findOne({
+      where:{
+        id: req.params.id
+      }
+    });
+
+    if(!user) return res.status(400).json('data user tidak ditemukan');
+
+    res.status(200).json(user)
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json(error.message);
+  }
+}
+
 
 // LOGOUT
 
@@ -116,9 +137,9 @@ export const logout = async(req, res)=> {
 export const getAlluser = async(req, res)=>{
   try {
     const response = await Users.findAll({
-      attributes:['uuid', 'name', 'email', 'foto', 'nohandphone', 'role']
+      attributes:['id', 'name', 'email', 'foto', 'nohandphone', 'role']
     });
-    res.status(200).json({msg: response});
+    res.status(200).json( response);
   } catch (error) {
     res.status(500).json({msg: error.message});
     
@@ -127,45 +148,85 @@ export const getAlluser = async(req, res)=>{
 
 
 // UPDATE USER 
-export const updateUser = async(req, res)=> {
-  const user = await Users.findOne({
-    where: {
-      uuid : req.params.id
-    }
-  });
-
-  if(!user) return res.status(404).json({msg: "Pengguna Tidak ditemukan"});
-  const {name, email, password, confPassword, foto, nohandphone, role} = req.body;
-  let hashPassword;
-  if(password === "" || password=== null){
-    hashPassword = user.password;
-
-  }else{
-    hashPassword = await argon2.hash(password);
-  }
-  if(password !== confPassword) return res.status(400).json({msg: "Password dan confirm password tidak sesuai"});
-
-  
+export const updateUser = async(req, res)=>{
 
   try {
-    await Users.update({
-      name: name,
-      email: email,
-      password: hashPassword,
-      foto: foto,
-      nohandphone: nohandphone,
-      role: role
-    },{
+    const user = await Users.findOne({
       where:{
-        id: user.id
+        id: req.params.id
       }
     });
-    res.status(201).json({msg: "Data User telah diedit"});
-    
-  } catch (error) {
-    res.status(400).json({msg: error.message});
-  }
 
+    if(!user) res.status(404).json({msg: "Data tidak ditemukan"})
+
+      let fileName;
+      if(!req.files || !req.files.foto){
+        fileName = user.foto;
+      }else{
+        const file = req.files.foto;
+        const fileSize= file.data.length;
+        const ext = path.extname(file.name);
+        fileName = file.md5 + ext;
+        const allowedType = ['.png', '.jpg', '.jpeg'];
+
+        if(!allowedType.includes(ext.toLocaleLowerCase())) return res.status(422).json({msg: "Gambar tidak valid"});
+        if(fileSize > 5000000) return res.status(422).json({msg: "Gambar harus kurang dari 5 MB"});
+
+        const oldFilePath = `./public/images/${user.foto}`;
+        const newFilePath = `./public/images/${fileName}`;
+
+        // hapus file gambar lama 
+
+        if(fs.existsSync(oldFilePath)){
+          fs.unlink(oldFilePath, (err) =>{
+            if(err) return res.status(500).json({msg: err.message});
+
+          });
+        }
+
+        // simpan file gambar baru 
+        file.mv(newFilePath, (err)=>{
+          if(err) return res.status(500).json({msg : err.message});
+
+        })
+
+      }
+
+      
+      const {name ,email, password, confPassword, nohandphone, role} = req.body;
+      const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
+
+      if(password !== confPassword){
+        res.status(400).json({msg: "Password dan confpassword tidak sesuai"});
+      }
+      const hashPassword = await argon2.hash(password);
+
+
+     
+
+    
+
+      await Users.update({
+        name: name,
+        email: email,
+        foto: fileName,
+        url: url,
+        password: hashPassword,
+        nohandphone: nohandphone,
+        role: role
+      },{
+        where:{
+          id:req.params.id
+        }
+      });
+
+      res.status(200).json({msg: "Data berhasil diperbarui"});
+  } catch (error) {
+
+    console.log(error.message);
+    res.status(500).json({msg: "Kesalahan server"});
+    
+  }
 }
 
 

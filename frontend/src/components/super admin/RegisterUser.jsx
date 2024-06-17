@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+
 
 const RegisterUser = () => {
   const [formData, setFormData] = useState({
@@ -76,9 +77,12 @@ const RegisterUser = () => {
   }
 
   return (
+   
     <div className="register-form" style={{ width: '300px', margin: '50px auto', padding: '20px', border: '1px solid #ccc', borderRadius: '10px', boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)' }}>
-      <h2 className='mb-3'>Register Users</h2>
+     
+      <h2 className='text-center mb-3'>Register Users</h2>
       {errorMessage && <p className="error">{errorMessage}</p>}
+      <Link to={'/PerawatAdmin'} className='btn btn-danger'>Kembali</Link>
       <form onSubmit={handleSubmit} method='post'>
         <div className="form-group">
           <label htmlFor="name">Nama Perawat/Register</label>

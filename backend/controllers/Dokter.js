@@ -109,7 +109,7 @@ export const MeDokter = async(req, res)=>{
 // MENDAPATKAN DOKTER SESUAI ID 
 export const getDokterById = async(req, res)=>{
   const response = await Dokter.findOne({
-    attributes:['name','email','foto','spesialis', 'password'],
+    attributes:['id','name','email','foto','spesialis', 'password'],
     where:{
       id: req.params.id
     }
@@ -261,10 +261,10 @@ export const getDokter = async(req, res)=>{
 // BUAT JADWAL DOKTER 
 
 export const createJadwal = async(req, res)=> {
-  if(!req.session.dokterId) res.status(404).json({msg: "session dokter tidak ditemukan"});
+  
 
   try {
-    const IdDokter = req.session.Id;
+    const IdDokter = req.params.id;
 
   const dokter = await Dokter.findOne({
     where:{

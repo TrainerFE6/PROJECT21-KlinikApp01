@@ -10,25 +10,12 @@ const Hero = () => {
               className="d-inline-block text-primary text-uppercase border-bottom border-5"
               style={{ borderColor: "rgba(256, 256, 256, .3)" }}
             >
-              Welcome To Medinova
+              Selamat Datang Di Sahabat Sehat.
             </h5>
-            <h1 className="display-1 text-white mb-md-4">
-              Best Healthcare Solution In Your City
-            </h1>
-            <div className="pt-2">
-              <a
-                href="/doctors"
-                className="btn btn-light rounded-pill py-md-3 px-md-5 mx-2"
-              >
-                Find Doctor
-              </a>
-              <a
-                href="/appointment"
-                className="btn btn-outline-light rounded-pill py-md-3 px-md-5 mx-2"
-              >
-                Appointment
-              </a>
-            </div>
+            <h2 className="display-1 text-white mb-md-4">
+            Kesehatan Adalah Investasi Terbaik
+            </h2>
+            
           </div>
         </div>
       </div>

@@ -13,7 +13,7 @@ route.get('/dokterLogin', MeDokter);
 route.put('/dokterupdate/:id', verifyDokter, updateDokter);
 route.delete('/dokterdelete/:id', deleteDokter);
 route.get('/dokter', getDokter);
-route.post('/jadwalDokter', createJadwal);
+route.post('/jadwalDokter/:id', createJadwal);
 route.get('/jadwalDokter', getJadwalDokter);
 route.get('/jadwalDokter/:id', getJadwalById);
 route.put('/jadwal/:id', updateJadwal);

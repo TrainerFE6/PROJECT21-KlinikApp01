@@ -25,7 +25,7 @@ export const createObat = async(req, res)=>{
 export const getObat = async(req, res)=>{
   try {
     const obat = await Obat.findAll({
-      attributes:['name_obat', 'Jenis_obat', 'stok', 'harga']
+      attributes:['id','name_obat', 'Jenis_obat', 'stok', 'harga']
     })
 
     res.status(200).json(obat);

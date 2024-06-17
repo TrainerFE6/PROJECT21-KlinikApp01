@@ -8,7 +8,7 @@ const NavbarAdmin = () => {
   const handleLogout = async () => {
     try {
       await logoutUser();
-      navigate('/LoginUser'); // Arahkan ke halaman login setelah logout
+      navigate('/'); // Arahkan ke halaman login setelah logout
     } catch (error) {
       console.error("Gagal logout:", error);
     }
@@ -37,13 +37,16 @@ const NavbarAdmin = () => {
                 dashboard
               </Link>
               <Link to="/halamanDokter" className="nav-item nav-link">
-                Dokter
+                Data Dokter
               </Link>
-              <Link to="/obatAdmin" className="nav-item nav-link">
+              <Link to="/ObatAdmin" className="nav-item nav-link">
                 Data Obat
               </Link>
-              <Link to="/pasienAdmin" className="nav-item nav-link">
-                Pasien
+              <Link to="/PerawatAdmin" className="nav-item nav-link">
+                Data Perawat
+              </Link>
+              <Link to="/PasienAdmin" className="nav-item nav-link">
+                Data Pasien
               </Link>
               <Link to="/profileAdmin" className="nav-item nav-link">
                 Profile
