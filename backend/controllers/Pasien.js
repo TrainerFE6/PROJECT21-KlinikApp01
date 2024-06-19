@@ -157,3 +157,45 @@ export const updatePasien = async(req, res)=> {
   }
 }
 
+
+// mendapatkan semua data pasien
+
+export const getAllPasien = async(req, res)=>{
+  try {
+    const pasien = await Pasien.findAll({
+      attributes:['id', 'name', 'alamat', 'ttl', 'nohandphone', 'keluhan', 'dokterSPesialis']
+    });
+
+    if(!pasien) return res.status(404).json({msg: 'data pasien tidak ditemukan'});
+
+    res.status(200).json(pasien)
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json(error.message);
+    
+  }
+}
+
+export const getPasienBaruDokter = async (req, res) => {
+  try {
+    if (!req.session.dokterId) return res.status(404).json({ msg: "Anda belum login" });
+
+    const dokter = await Dokter.findOne({
+      where:{
+        uuid : req.session.dokterId
+      }
+    })
+    const pasienBaru = await Pasien.findAll({
+      attributes: ['uuid', 'name', 'alamat', 'ttl', 'nohandphone', 'keluhan', 'dokterSPesialis'],
+      where: {
+        dokterSPesialis: dokter.spesialis
+      },
+      order: [['createdAt', 'DESC']], // Order by latest
+      limit: 5 // Limit to the latest 5 activities
+    });
+    console.log('pasien baru', pasienBaru);
+    res.status(200).json(pasienBaru);
+  } catch (error) {
+    res.status(500).json({ msg: 'Terjadi kesalahan', error });
+  }
+};

@@ -162,3 +162,51 @@ export const getJumlahRekap = async (req, res) => {
     res.status(500).json({ msg: 'Terjadi kesalahan di server' });
   }
 };
+
+export const getRekapAdmin = async(req, res)=>{
+  if(!req.session.adminId) return res.status(404).json({msg: "fitur ini membutuhkan sesi"});
+
+  try {
+    const namaPasien = req.params.name
+    console.log(namaPasien);
+
+    const rekap = await Rekap.findOne({
+      where:{
+        nama_pasien : namaPasien
+      }
+    })
+    
+
+    if(!rekap) return res.status(404).json({msg: "Rekap Tidak ditemukan"});
+
+    res.status(200).json(rekap);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json(error.message);
+    
+  }
+}
+
+
+export const deleteRekap = async(req, res)=>{
+
+  await Rekap.destroy({
+    where:{
+      id: req.params.id
+    }
+  });
+ 
+
+  res.status(200).json({msg: 'Rekap Medis Dihapus'});
+}
+export const deletePasien = async(req, res)=>{
+
+  await Pasien.destroy({
+    where:{
+      id: req.params.id
+    }
+  });
+ 
+
+  res.status(200).json({msg: 'Data Pasien di Hapus'});
+}

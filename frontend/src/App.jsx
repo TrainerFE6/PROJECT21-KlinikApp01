@@ -8,7 +8,7 @@ import Navbar from "./components/Navbar";
 // Import Pages
 
 import Home from "./pages/Home";
-
+import DashboardDokter from "./components/DashboardDokter";
 import LoginDokter from "./pages/LoginDokter";
 
 import JadwalDoc from "./pages/JadwalDoc";
@@ -24,6 +24,7 @@ import UpdateJadwalForm from "./components/updateJadwal";
 import UpdateSkeduleForm from "./components/UpdateSkedule";
 import PasienList from "./components/RekapMedis";
 import CreateRekapMedis from "./components/CreateRekapMedis";
+
 
 // untuk user
 import NavUser from "./components/users/NavbarUser";
@@ -55,6 +56,9 @@ import BuatObat from "./components/super admin/CreateObat";
 import HalamanPerawat from "./components/super admin/HalamanPerawat";
 import RegisUser from "./pages/RegisUser";
 
+import HalamanPasien from "./components/super admin/HalamanPasien";
+import RekapPasien from "./components/super admin/RekapPasien";
+
 const AppContent = () => {
   const location = useLocation();
   // admin path 
@@ -65,7 +69,8 @@ const AppContent = () => {
     '/spesialis',
     '/createSPesialis',
     '/ObatAdmin',
-    '/PerawatAdmin'
+    '/PerawatAdmin',
+    '/PasienAdmin'
   ]
 
   // Define paths for user and doctor pages
@@ -117,7 +122,8 @@ const AppContent = () => {
     '/view-dokter/:id',
     '/ObatAdmin',
     '/create-obat',
-    '/PerawatAdmin'
+    '/PerawatAdmin',
+    '/PasienAdmin'
   ];
 
   // Use regex to match dynamic paths
@@ -129,6 +135,7 @@ const AppContent = () => {
   const isViewDokterPath = /^\/view-dokter\/[^/]+$/.test(location.pathname);
   const isBuatJadwalPath = /^\/buatJadwal\/[^/]+$/.test(location.pathname);
   const isUpdateUserPath = /^\/update-user\/[^/]+$/.test(location.pathname);
+  const isRekapPasienPath = /^\/RekapPasien\/[^/]+$/.test(location.pathname);
 
 
   return (
@@ -147,14 +154,17 @@ const AppContent = () => {
       {!isViewSkedulePath && !isViewRekapMedisPath &&!isUserPath &&isAdminPath && location.pathname === "/spesialis" && <NavbarAdmin />}
       {!isViewSkedulePath && !isViewRekapMedisPath &&!isUserPath &&isAdminPath && location.pathname === "/ObatAdmin" && <NavbarAdmin />}
       {!isViewSkedulePath && !isViewRekapMedisPath &&!isUserPath &&isAdminPath && location.pathname === "/PerawatAdmin" && <NavbarAdmin />}
+      {!isViewSkedulePath && !isViewRekapMedisPath &&!isUserPath &&isAdminPath && location.pathname === "/PasienAdmin" && <NavbarAdmin />}
 
 
-      {!isUpdateUserPath && !isBuatJadwalPath && !isViewDokterPath && !isViewSkedulePath && !isViewRekapMedisPath &&!isAdminPath  && !isUserPath && !noNavbarFooterPaths.includes(location.pathname) && <Navbar />}
+      {!isRekapPasienPath && !isUpdateUserPath && !isBuatJadwalPath && !isViewDokterPath && !isViewSkedulePath && !isViewRekapMedisPath &&!isAdminPath  && !isUserPath && !noNavbarFooterPaths.includes(location.pathname) && <Navbar />}
       <Routes>
        
         
        
         <Route path="/" element={<Home />} />
+        
+        <Route path="/dashboardDokter" element={<DashboardDokter />} />
         <Route path="/dokter" element={<DokterPage />} />
         <Route path="/LoginDokter" element={<LoginDokter />} />
         <Route path="/dokter/dataPasien" element={<DataPasienDokter />} />
@@ -195,6 +205,8 @@ const AppContent = () => {
         <Route path="/ObatAdmin" element={<DataObatAdmin />} />
         <Route path="/create-obat" element={<BuatObat />} />
         <Route path="/PerawatAdmin" element={<HalamanPerawat />} />
+        <Route path="/PasienAdmin" element={<HalamanPasien />} />
+        <Route path="/RekapPasien/:name" element={<RekapPasien />} />
 
       </Routes>
     </>

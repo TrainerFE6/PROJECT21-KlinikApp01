@@ -1,5 +1,5 @@
 import express from 'express';
-import { createUser,Login, Me, logout, getAlluser, updateUser, getRole, getUserById} from '../controllers/Users.js';
+import { createUser,Login, Me, logout, getAlluser, updateUser, getRole, getUserById, deleteUser} from '../controllers/Users.js';
 import { verifyUser } from '../middleware/AuthUser.js';
 import { getSkedulePerawat } from '../controllers/Skedule.js';
 import { getRekap, updateRekap, getRekapById, getJumlahRekap } from '../controllers/Rekap.js';
@@ -22,6 +22,7 @@ router.put('/updateRekap/:id', updateRekap);
 router.get('/rekapById/:id', getRekapById);
 router.get('/jumlahRekap', getJumlahRekap);
 router.delete('/LogoutUser', logout);
+router.delete('/deleteUser/:id', deleteUser);
 
 
 

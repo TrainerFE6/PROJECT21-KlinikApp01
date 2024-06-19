@@ -240,3 +240,32 @@ export const getRole = async(req, res)=>{
 
   res.status(200).json(role);
 };
+
+
+
+// DELETE USER 
+export const deleteUser = async(req, res)=>{
+  const user = await Users.findOne({
+    where:{
+      id: req.params.id
+    }
+  });
+
+  if(!user) return res.status(404).json({msg: "Data user tidak ditemukan"});
+
+  try {
+    const filePath = `./public/images/${user.foto}`;
+    fs.unlinkSync(filePath);
+
+    await user.destroy({
+      where:{
+        id: req.params.id
+      }
+    });
+
+    res.status(200).json({msg: "Data sukses dihapus"});
+    
+  } catch (error) {
+    console.log(error);
+  }
+}

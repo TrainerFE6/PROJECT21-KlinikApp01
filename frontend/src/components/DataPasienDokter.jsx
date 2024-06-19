@@ -1,18 +1,23 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 const PasienTable = () => {
   const [pasien, setPasien] = useState([]);
+  const [filteredPasien, setFilteredPasien] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [notification, setNotification] = useState(null); // State untuk notifikasi
-  const [skeduleCreated, setSkeduleCreated] = useState({}); // State untuk status skedule
+  const [notification, setNotification] = useState(null);
+  const [skeduleCreated, setSkeduleCreated] = useState({});
+  const [searchTerm, setSearchTerm] = useState(''); // State untuk input pencarian
 
   useEffect(() => {
     const fetchPasien = async () => {
       try {
         const response = await axios.get('http://localhost:5000/pasienDokter');
         setPasien(response.data);
+        setFilteredPasien(response.data);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -22,27 +27,35 @@ const PasienTable = () => {
 
     fetchPasien();
 
-    // Muat status skedule dari localStorage
     const savedSkeduleCreated = JSON.parse(localStorage.getItem('skeduleCreated')) || {};
     setSkeduleCreated(savedSkeduleCreated);
   }, []);
 
-  // Fungsi untuk menampilkan notifikasi
+  useEffect(() => {
+    // Filter pasien berdasarkan searchTerm di semua field
+    setFilteredPasien(
+      pasien.filter((p) =>
+        Object.values(p).some(val =>
+          String(val).toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      )
+    );
+  }, [searchTerm, pasien]);
+
   const showNotification = (message) => {
-    setNotification(message); // Set notifikasi
+    setNotification(message);
     setTimeout(() => {
-      setNotification(null); // Hilangkan notifikasi setelah beberapa detik
-    }, 3000); // Sesuaikan dengan kebutuhan
+      setNotification(null);
+    }, 3000);
   };
 
-  // Fungsi untuk membuat skedule
   const createSkedule = async (id) => {
     try {
       await axios.post(`http://localhost:5000/skedulePasien/${id}`);
       const updatedSkeduleCreated = { ...skeduleCreated, [id]: true };
-      setSkeduleCreated(updatedSkeduleCreated); // Tandai skedule sebagai sudah dibuat
-      localStorage.setItem('skeduleCreated', JSON.stringify(updatedSkeduleCreated)); // Simpan ke localStorage
-      showNotification('Skedule berhasil dibuat!'); // Tampilkan notifikasi setelah skedule berhasil dibuat
+      setSkeduleCreated(updatedSkeduleCreated);
+      localStorage.setItem('skeduleCreated', JSON.stringify(updatedSkeduleCreated));
+      showNotification('Skedule berhasil dibuat!');
     } catch (error) {
       setError(error.response?.data?.msg || 'Terjadi kesalahan');
     }
@@ -53,7 +66,22 @@ const PasienTable = () => {
 
   return (
     <div className="table-container">
-      {notification && <div className="notification">{notification}</div>} {/* Tampilkan notifikasi */}
+      {notification && <div className="notification">{notification}</div>}
+      
+      <div className="input-group mb-3">
+        <span className="input-group-text">
+          <FontAwesomeIcon icon={faSearch} />
+        </span>
+        <input
+          type="text"
+          placeholder="Cari Data Pasien..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="form-control search-input"
+          
+        />
+      </div>
+
       <table className="table is-striped is-hoverable">
         <thead>
           <tr>
@@ -66,7 +94,7 @@ const PasienTable = () => {
           </tr>
         </thead>
         <tbody>
-          {pasien.map((item, index) => (
+          {filteredPasien.map((item, index) => (
             <tr key={index}>
               <td>{item.name}</td>
               <td>{item.alamat}</td>
@@ -77,9 +105,9 @@ const PasienTable = () => {
                 <button
                   onClick={() => createSkedule(item.id)}
                   className="btn btn-danger"
-                  disabled={skeduleCreated[item.id]} // Disable button jika skedule sudah dibuat
+                  disabled={skeduleCreated[item.id]}
                 >
-                  {skeduleCreated[item.id] ? 'Skedule Telah Dibuat' : 'Buat Skedule'} {/* Ubah teks button */}
+                  {skeduleCreated[item.id] ? 'Skedule Telah Dibuat' : 'Buat Skedule'}
                 </button>
               </td>
             </tr>

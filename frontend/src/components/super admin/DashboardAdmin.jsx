@@ -5,10 +5,10 @@ import axios from 'axios';
 const DashboardAdmin = () => {
   const [dokter, setDokter] = useState([]);
   const [pasien, setPasien] = useState([]);
-  const [jumlahRekap, setJumlahRekap] = useState(0);
+  const [user, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [aktivitasTerbaru, setAktivitasTerbaru] = useState([]);
+ 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -16,14 +16,10 @@ const DashboardAdmin = () => {
         const dokterResponse = await axios.get('http://localhost:5000/dokter');
         setDokter(dokterResponse.data);
 
-        const pasienResponse = await axios.get('http://localhost:5000/pasienPerawat');
+        const pasienResponse = await axios.get('http://localhost:5000/getPasien');
         setPasien(pasienResponse.data);
-
-        const aktivitasResponse = await axios.get('http://localhost:5000/aktivitasTerbaru');
-        setAktivitasTerbaru(aktivitasResponse.data);
-
-        const jumlahRekapResponse = await axios.get('http://localhost:5000/jumlahRekap');
-        setJumlahRekap(jumlahRekapResponse.data.jumlahRekap);
+        const UserResponse = await axios.get('http://localhost:5000/users');
+        setUsers(UserResponse.data);
       } catch (error) {
         setError(error.message);
       } finally {
@@ -60,37 +56,19 @@ const DashboardAdmin = () => {
         <Col md={4}>
           <Card className="text-center">
             <Card.Body>
-              <Card.Title>Jumlah Rekap</Card.Title>
+              <Card.Title>Jumlah Perawat</Card.Title>
               <Card.Text>
-                {loading ? 'Loading...' : jumlahRekap}
+                {loading ? 'Loading...' : user.length}
               </Card.Text>
             </Card.Body>
           </Card>
         </Col>
+      
       </Row>
       <Row className="mb-4">
-        <Col>
-          <Card>
-            <Card.Header className="bg-primary text-white">Aktivitas Terbaru</Card.Header>
-            <Card.Body>
-              <ul>
-                {loading ? (
-                  <li>Loading...</li>
-                ) : (
-                  aktivitasTerbaru.length === 0 ? (
-                    <li>Tidak ada aktivitas terbaru</li>
-                  ) : (
-                    aktivitasTerbaru.map((aktivitas, index) => (
-                      <li key={index}>Pendaftaran Pasien Baru: {aktivitas.name}, <b>keluhan: {aktivitas.keluhan}</b></li>
-                    ))
-                  )
-                )}
-              </ul>
-            </Card.Body>
-          </Card>
-        </Col>
       </Row>
       <Row>
+        <h2 className='text-center mb-3'>Daftar Dokter Rumah Sakit</h2>
         {dokter.map((item) => (
           <Col md={4} key={item.id} className="mb-4">
             <Card className="text-center">
@@ -103,6 +81,26 @@ const DashboardAdmin = () => {
               </Card.Body>
               <Card.Footer>
                 <img src={`http://localhost:5000/images/dokter/${item.foto}`} alt={`Foto ${item.name}`} style={{ width: '100%', height: 'auto' }} />
+              </Card.Footer>
+            </Card>
+          </Col>
+        ))}
+      </Row>
+
+      <Row>
+      <h2 className='text-center mb-3'>Daftar Perawat Rumah Sakit</h2>
+        {user.map((it) => (
+          <Col md={4} key={it.id} className="mb-4">
+            <Card className="text-center">
+              <Card.Body>
+                <Card.Title>{it.name}</Card.Title>
+                <Card.Text>
+                  Email: {it.email}<br />
+                  Role: {it.role}
+                </Card.Text>
+              </Card.Body>
+              <Card.Footer>
+                <img src={`http://localhost:5000/images/${it.foto}`} alt={`Foto ${it.name}`} style={{ width: '100%', height: 'auto' }} />
               </Card.Footer>
             </Card>
           </Col>

@@ -4,7 +4,7 @@ import cors from 'cors';
 import session from 'express-session';
 import dotenv from 'dotenv';
 import db from './config/database.js';
-
+import Skedule from './models/SchduleModels.js';
 import SequelizeStore from 'connect-session-sequelize';
 import Userrouter from './routes/Users.js';
 import DokterRoute from './routes/Dokter.js'; 

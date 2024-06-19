@@ -23,7 +23,7 @@ const UpdateSkeduleForm = () => {
           sceduledate: data.sceduledate,
           sceduletime: data.sceduletime,
           namedokter: data.namedokter,
-          namepasien: data.namepasien,
+          namePasien: data.namePasien,
         });
       } catch (err) {
         setError(err.response?.data?.msg || 'Error fetching schedule');
@@ -104,7 +104,7 @@ const UpdateSkeduleForm = () => {
             className="form-control"
             id="namepasien"
             name="namepasien"
-            value={formData.namepasien}
+            value={formData.namePasien}
             onChange={handleChange}
             required readOnly
           />

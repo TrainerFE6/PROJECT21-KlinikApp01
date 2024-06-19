@@ -20,7 +20,7 @@ const LoginForm = () => {
     console.log(response.data);
     localStorage.setItem('dokterData', JSON.stringify(response.data))
     // simpan data dokter ke state atau localStorage sesuai kebutuhan
-    navigate('/Home'); 
+    navigate('/dahsboardDokter'); 
    } catch (error) {
     if(error.response){
       setErrorMessage(error.response.data.msg);

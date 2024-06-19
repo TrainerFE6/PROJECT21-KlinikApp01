@@ -34,7 +34,7 @@ const DataObatAdmin = () => {
       {error && <div className="alert alert-danger">{error}</div>}
       {obat.length > 0 ? (
         <div className="row">
-          <h2 className='text-center mb-3 mt-3'>Data Obat Rumah Sakit</h2>
+          <h2 className='text-center mb-3 mt-3'>Data Obat Klinik</h2>
           {obat.map((item) => (
             <div className="col-md-4 mb-3" key={item.id}>
               <div className="card h-100 d-flex align-items-center justify-content-center">

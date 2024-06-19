@@ -33,7 +33,7 @@ const SkedulePerawat = () => {
     <div className="container mt-5">
       <div className="card text-center">
         <div className="card-header bg-primary text-white">
-          <h5>No. Antrian: {skedule.noantrian}</h5>
+          <h5>No. Antrian: {skedule.antrian}</h5>
         </div>
         <div className="card-body">
           <h5 className="card-title">Pasien: {skedule.namePasien}</h5>

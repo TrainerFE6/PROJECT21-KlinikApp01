@@ -143,3 +143,8 @@ GET http://localhost:5000/obat
 ###
 //DELETE OBAT
 DELETE http://localhost:5000/deleteObat/4
+
+
+
+###
+DELETE http://localhost:5000/deleteSkedule/jejen

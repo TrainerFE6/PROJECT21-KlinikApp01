@@ -23,6 +23,15 @@ const HalamanPerawat = () => {
     fetchData();
   }, []);
 
+  const handleDeleteUser = async (id) => {
+    try {
+      await axios.delete(`http://localhost:5000/deleteUser/${id}`);
+      setUser(user.filter(item => item.id !== id)); // Menghapus obat dari state lokal setelah berhasil dihapus dari server
+    } catch (err) {
+      setError(err.response?.data?.msg || 'Error deleting Users');
+    }
+  };
+
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -60,7 +69,7 @@ const HalamanPerawat = () => {
               </td>
               <td>{us.role}</td>
               <td>
-                <Link to={`/hapus/${us.id}`} className='btn btn-danger'>Hapus</Link>
+              <button className='btn btn-danger mt-3' onClick={() => handleDeleteUser(us.id)}>Hapus</button>
               </td>
             </tr>
           ))}

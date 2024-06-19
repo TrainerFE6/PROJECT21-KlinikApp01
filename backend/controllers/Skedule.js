@@ -5,8 +5,8 @@ import JadwalDokter from "../models/JadwalDokter.js";
 import Users from "../models/UsersModel.js";
 import { updateDokter } from "./Dokter.js";
 
-export const SkedulePasien = async(req, res) => {
-  if(!req.session.dokterId) return res.status(404).json({msg: "Session dokter tidak valid"});
+export const SkedulePasien = async (req, res) => {
+  if (!req.session.dokterId) return res.status(404).json({ msg: "Session dokter tidak valid" });
 
   const id = req.session.Id;
 
@@ -26,11 +26,14 @@ export const SkedulePasien = async(req, res) => {
     });
     if (!pasien) return res.status(404).json({ msg: "Pasien tidak ditemukan" });
 
-    const count = await Skedule.count();
-    const noantrian = count +1;
+    // Hitung jumlah antrian berdasarkan spesialis
+    const count = await Skedule.count({
+      where: { dokterSpesialis: jadwal.spesialis }
+    });
+    const antrian = count + 1;
 
     await Skedule.create({
-      noantrian: noantrian,
+      antrian: antrian,
       title: pasien.keluhan,
       sceduledate: jadwal.jadwal_pelayanan,
       sceduletime: jadwal.waktu_pelayanan,
@@ -44,7 +47,8 @@ export const SkedulePasien = async(req, res) => {
     console.error(error);
     res.status(500).json({ msg: "Server error" });
   }
-}
+};
+
 
 
 export const getSkedule = async(req, res)=>{
@@ -103,73 +107,64 @@ export const getSkedulePerawat = async(req, res) => {
 };
 
 
-export const getSkeduleDokter = async(req, res)=>{
-  if(!req.session.Id) return res.status(404).json({msg: "fitur ini membutuhkan sesi"});
+export const getSkeduleDokter = async(req, res) => {
+  if (!req.session.Id) return res.status(404).json({ msg: "fitur ini membutuhkan sesi" });
+
   try {
     const id = req.session.Id;
     const dokter = await Dokter.findOne({
-      where:{
+      where: {
         id: id
       }
     });
-    console.log(dokter.name)
-    if(!dokter){
-      console.log("data dokter tidak ditemukan");
-      return res.status(404).json({msg: "Data dokter tidak ditemukan"});
 
+    if (!dokter) {
+      console.log("data dokter tidak ditemukan");
+      return res.status(404).json({ msg: "Data dokter tidak ditemukan" });
     }
 
     const skedule = await Skedule.findAll({
-      where:{
+      where: {
         namedokter: dokter.name
       }
     });
 
-    res.status(200).json(skedule);
+    // Tambahkan logging untuk data skedule
+    console.log("Data skedule yang ditemukan:", skedule);
 
+    // Cek apakah setiap skedule memiliki noantrian yang valid
+    const validSkedule = skedule.map((item) => ({
+      noantrian: item.noantrian,
+      antrian: item.antrian,
+      sceduledate: item.sceduledate,
+      sceduletime: item.sceduletime,
+      namePasien: item.namePasien,
+      namedokter: item.namedokter,
+      title: item.title
+    }));
+
+    console.log("Data skedule yang valid:", validSkedule);
+
+    res.status(200).json(validSkedule);
   } catch (error) {
     console.log(error.message);
     res.status(500).json(error.message);
-    
   }
-}
+};
 
 
 
 
-
-
-
-export const deleteScedule = async(req, res)=>{
-  const skedule = await Skedule.findOne({
-    where:{
-      id: req.params.id
-    }
-  });
-
-  if(!skedule) return res.status(404).json({msg: "skedule untuk pasien belum tersedia"});
-
-  try {
-    await Skedule.destroy({
-      where:{
-        id: req.params.id
-      }
-    });
-    res.status(200).json({msg: `skedule ${skedule.namePasien} telah dihapus`});
-  } catch (error) {
-    res.status(500).json({msg: "server error"});
-  }
-
-}
 
 
 export const updateSkedule = async(req, res)=>{
   if(!req.session.Id) return res.status(404).json({msg: "fitur ini membutuhkan sesi"});
 
   try {
-    const {sceduledate, sceduletime, namedokter, namepasien}= req.body;
+    const {sceduledate, sceduletime, namedokter, namepasien, antrian}= req.body;
 
     await Skedule.update({
+      antrian:antrian,
       sceduletime: sceduletime,
       sceduledate: sceduledate,
       namedokter: namedokter,
@@ -191,7 +186,7 @@ export const getSkeduleById = async(req, res)=>{
   if(!req.session.Id) return res.status(404).json({msg: "fitur ini membuntuh kan sesi"});
   try {
     const skedule = await Skedule.findOne({
-      attributes:['noantrian','title', 'sceduledate', 'sceduletime', 'namedokter', 'namepasien', 'dokterSpesialis'],
+      attributes:['antrian','title', 'sceduledate', 'sceduletime', 'namedokter', 'namePasien', 'dokterSpesialis'],
       where:{
         noantrian:req.params.noantrian
       }
@@ -207,4 +202,25 @@ export const getSkeduleById = async(req, res)=>{
 
 
 
-// mendapatkan jumlah rekapPerawat
+//DELETE SKEDULE 
+
+
+
+export const deleteSkedule = async(req, res)=>{
+  try {
+    const skedule = await Skedule.findOne({
+      where: {
+        namePasien: req.params.namePasien
+      }
+    });
+
+    if(!skedule) return res.status(404).json({msg: "Obat Tidak ditemukan"});
+
+    await skedule.destroy();
+    res.status(200).json({msg: "SKedule telah dihapus"})
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json(error.message);
+    
+  }
+}

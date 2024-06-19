@@ -28,7 +28,7 @@ const CreateRekapMedis = () => {
         setPasienData(response.data);
         setFormData((prevData) => ({
           ...prevData,
-          nama_pasien: response.data.namepasien,
+          nama_pasien: response.data.namePasien,
           nama_dokter: response.data.namedokter,
           keluhan_pasien: response.data.title,
           jenis_pemeriksaan: response.data.dokterSpesialis
@@ -83,7 +83,7 @@ const CreateRekapMedis = () => {
       {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
       {pasienData && (
         <div className="mb-3 card" style={{ backgroundColor: '#E0F7FA', padding: '20px' }}>
-          <p><strong>Nama Pasien:</strong> {pasienData.namepasien}</p>
+          <p><strong>Nama Pasien:</strong> {pasienData.namePasien}</p>
           <p><strong>Keluhan:</strong> {pasienData.title}</p>
           <p><strong>Nama Dokter:</strong> {pasienData.namedokter}</p>
         </div>

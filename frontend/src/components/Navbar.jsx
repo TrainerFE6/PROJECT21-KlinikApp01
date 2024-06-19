@@ -32,8 +32,8 @@ const Navbar = () => {
           </button>
           <div className="collapse navbar-collapse show" id="navbarCollapse">
             <div className="navbar-nav ms-auto py-0">
-              <Link to="/home" className="nav-item nav-link">
-                home
+              <Link to="/dashboardDokter" className="nav-item nav-link">
+                dashboard
               </Link>
               <Link to="/pemeriksaan" className="nav-item nav-link">
                 My Schedule
@@ -45,7 +45,7 @@ const Navbar = () => {
                 Data Pasien
               </Link>
               <Link to="/RekapMedis" className="nav-item nav-link">
-                Rekap Medis Pasien
+                Rekap Pasien
               </Link>
               <Link to="/dokter" className="nav-item nav-link">
                 dokter

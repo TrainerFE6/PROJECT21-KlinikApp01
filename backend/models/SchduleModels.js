@@ -14,6 +14,10 @@ const Skedule = db.define('skedule', {
     autoIncrement: true,
     primaryKey: true,
   },
+  antrian:{
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
   title:{
     type: DataTypes.STRING,
     allowNull: false,

@@ -65,7 +65,7 @@ const RegisterUser = () => {
       console.log('Success:', response);
       alert('Register berhasil!');  // Menampilkan alert setelah pendaftaran berhasil
       setErrorMessage('');
-      navigate('/');  // Mengarahkan ke halaman beranda setelah pendaftaran berhasil
+      navigate('/PerawatAdmin');  // Mengarahkan ke halaman beranda setelah pendaftaran berhasil
     } catch (error) {
       console.error('Error occurred:', error);
       setErrorMessage(error.response ? error.response.data : error.message);

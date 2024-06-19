@@ -48,9 +48,7 @@ const NavbarAdmin = () => {
               <Link to="/PasienAdmin" className="nav-item nav-link">
                 Data Pasien
               </Link>
-              <Link to="/profileAdmin" className="nav-item nav-link">
-                Profile
-              </Link>
+             
               <button onClick={handleLogout} className="nav-item nav-link btn btn-link">
                 Logout
               </button>
