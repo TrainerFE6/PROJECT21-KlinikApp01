@@ -19,16 +19,14 @@ function JadwalDokter() {
       console.error('Error:', error);
     }
   };
-  const handleCreateJadwal = ()  =>{
-    navigate('/createJadwal');
-  }
+
 
   return (
     <div className="container mt-5">
       <div className="row">
         <div className="col-md-6 offset-md-3">
           <h2 className="text-center mb-4" style={{ fontSize:'30px', fontWeight:'bold', color:"CaptionText"}}>Jadwal Anda</h2>
-          <button className='btn btn-primary mb-4' onClick={handleCreateJadwal}>Buat Jadwal</button>
+         
           <div className="card text-center">
             <div className="card-header">
               Jadwal Dokter : Dr. {jadwal.nama_dokter}

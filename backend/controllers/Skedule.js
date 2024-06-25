@@ -51,6 +51,7 @@ export const SkedulePasien = async (req, res) => {
 
 
 
+
 export const getSkedule = async(req, res)=>{
   const pasien = await Pasien.findOne({
     where:{
