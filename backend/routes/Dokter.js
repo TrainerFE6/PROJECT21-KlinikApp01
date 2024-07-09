@@ -4,6 +4,7 @@ import { SkedulePasien, getSkeduleDokter, updateSkedule, getSkeduleById, deleteS
 import { createRekapMedis } from '../controllers/Rekap.js';
 
 import { verifyDokter, } from '../middleware/AuthDokter.js';
+import { getObatSession } from '../controllers/Obat.js';
 
 const route = express.Router();
 
@@ -26,6 +27,7 @@ route.put('/updateSkedule/:noantrian', updateSkedule);
 route.get('/skeduleId/:noantrian', getSkeduleById);
 route.post('/rekapmedis', createRekapMedis);
 route.delete('/deleteSkedule/:namePasien', deleteSkedule);
+route.get('/obatSession/:id', getObatSession);
 
 
 

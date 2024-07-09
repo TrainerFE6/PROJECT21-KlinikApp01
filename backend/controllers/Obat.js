@@ -36,6 +36,21 @@ export const getObat = async(req, res)=>{
   }
 }
 
+export const getObatSession = async(req, res)=>{
+
+  try {
+    const obatUser = await findAll({
+      where : {
+        id: req.params.id
+      }
+    })
+
+    res.status(200).json(obatUser);
+  } catch (error) {
+    res.status(500).json(error.message);
+    
+  }
+}
 
 export const deleteObat = async(req, res)=>{
   try {
